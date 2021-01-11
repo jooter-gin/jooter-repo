@@ -44,5 +44,7 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button fx:id="changeButton" layoutX="206.0" layoutY="468.0" mnemonicParsing="false" onAction="#onChangeButtonClicked" prefHeight="50.0" prefWidth="168.0" text="CHANGE" />
+      <Button fx:id="deleteAccButton" layoutX="209.0" layoutY="533.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="168.0" text="DELETE ACCOUNT" textFill="#362626" onAction="#onDeleteAccountButtonClicked" />
    </children>
 </AnchorPane>
