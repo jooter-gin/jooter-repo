@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="ProfProfileAnchorPane" prefHeight="668.0" prefWidth="594.0" style="-fx-background-color: #0f1f2a;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.userProfileController">
+   <children>
+      <Label fx:id="ProfProfileLabel" alignment="CENTER" layoutX="204.0" layoutY="28.0" prefHeight="50.0" prefWidth="208.0" text="PROFILE" textFill="#f5f2f2">
+         <font>
+            <Font name="DejaVu Sans Bold" size="36.0" />
+         </font>
+      </Label>
+      <TextField fx:id="ProfNameField" layoutX="184.0" layoutY="230.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="252.0" />
+      <TextField fx:id="ProfSurnameField" layoutX="184.0" layoutY="287.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="252.0" />
+      <TextField fx:id="ProfLoginField" layoutX="186.0" layoutY="350.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="252.0" />
+      <TextField fx:id="ProfEmailField" layoutX="188.0" layoutY="408.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="252.0" />
+      <PasswordField fx:id="ProfPasswordField" layoutX="185.0" layoutY="464.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="258.0" />
+      <TextField fx:id="ProfCardNrField" layoutX="187.0" layoutY="522.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="252.0" />
+      <Label fx:id="ProfNameLabel" layoutX="184.0" layoutY="205.0" prefHeight="25.0" prefWidth="56.0" text="Name" textFill="WHITE" />
+      <Label fx:id="ProfSurnameLabel" layoutX="182.0" layoutY="262.0" prefHeight="25.0" prefWidth="56.0" text="Surname" textFill="WHITE" />
+      <Label fx:id="ProfLoginLabel" layoutX="184.0" layoutY="322.0" prefHeight="25.0" prefWidth="56.0" text="Login" textFill="WHITE" />
+      <Label fx:id="ProfPasswordLabel" layoutX="184.0" layoutY="439.0" prefHeight="25.0" prefWidth="56.0" text="Password" textFill="WHITE" />
+      <Label fx:id="ProfEmailLabel" layoutX="188.0" layoutY="383.0" prefHeight="25.0" prefWidth="56.0" text="E-mail" textFill="WHITE" />
+      <Label fx:id="ProfCardNrLabel" layoutX="187.0" layoutY="497.0" prefHeight="25.0" prefWidth="78.0" text="Card No" textFill="WHITE" />
+      <ImageView fx:id="ProfImage" fitHeight="121.0" fitWidth="103.0" layoutX="251.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@user.png" />
+         </image></ImageView>
+      <Button fx:id="ProfButtonSave" layoutX="186.0" layoutY="570.0" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="42.0" prefWidth="252.0" text="SAVE" />
+      <Button fx:id="logoutButton" layoutX="531.0" layoutY="3.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" text="LOGOUT" />
+      <Button fx:id="backButton" layoutX="466.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="25.0" prefWidth="56.0" text="BACK" />
+      <Label fx:id="infPassLabel" layoutX="252.0" layoutY="443.0" text="Label" visible="false" />
+      <Label fx:id="infEmailLabel" layoutX="260.0" layoutY="387.0" text="Label" visible="false" />
+      <Label fx:id="infCardNoLabel" layoutX="252.0" layoutY="501.0" text="Label" visible="false" />
+      <Label fx:id="infLoginLabel" layoutX="252.0" layoutY="326.0" text="Label" visible="false" />
+      <Label fx:id="infNameLabel" layoutX="252.0" layoutY="209.0" text="Label" visible="false" />
+      <Label fx:id="infSurnameLabel" layoutX="252.0" layoutY="266.0" text="Label" visible="false" />
+   </children>
+</AnchorPane>

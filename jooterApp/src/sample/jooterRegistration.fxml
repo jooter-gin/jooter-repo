@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="regOuterAnchorPane" prefHeight="520.0" prefWidth="803.0" styleClass="bodybg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.JooterRegistrationController">
+   <children>
+      <AnchorPane fx:id="regInnerAnchorPane" layoutX="438.0" layoutY="16.0" prefHeight="479.0" prefWidth="341.0" style="-fx-background-color: #0f1f2a;">
+         <children>
+            <Label fx:id="regInvalidPasswordLabel" alignment="CENTER" layoutX="193.0" layoutY="297.0" text="Invalid password" textFill="#f10a0a" visible="false">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="regJooterLabel" alignment="CENTER" layoutX="89.0" layoutY="14.0" prefHeight="44.0" prefWidth="164.0" text="JOOTER" textFill="#f5f2f2">
+               <font>
+                  <Font name="DejaVu Sans Bold" size="36.0" />
+               </font>
+            </Label>
+            <TextField fx:id="regNameField" layoutX="40.0" layoutY="91.0" onKeyReleased="#onKeyReleased" onMouseClicked="#onTextFieldClicked" prefHeight="25.0" prefWidth="249.0" />
+            <TextField fx:id="regSurnameField" layoutX="42.0" layoutY="146.0" onKeyReleased="#onKeyReleased" onMouseClicked="#onTextFieldClicked" prefHeight="25.0" prefWidth="249.0" />
+            <TextField fx:id="regLoginField" layoutX="40.0" layoutY="199.0" onKeyReleased="#onKeyReleased" onMouseClicked="#onTextFieldClicked" prefHeight="25.0" prefWidth="249.0" />
+            <PasswordField fx:id="regPasswordField" layoutX="40.0" layoutY="314.0" onKeyReleased="#onKeyReleased" onMouseClicked="#onTextFieldClicked" prefHeight="25.0" prefWidth="249.0" />
+            <Label fx:id="regNameLabel" layoutX="39.0" layoutY="74.0" text="Enter your name" textFill="#f5f0f0">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <Label fx:id="regSurnameLabel" layoutX="41.0" layoutY="129.0" prefHeight="19.0" prefWidth="123.0" text="Enter your surname" textFill="#f2ecec">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <Label fx:id="regLoginLabel" layoutX="40.0" layoutY="182.0" prefHeight="17.0" prefWidth="98.0" text="Enter your login" textFill="#f5efef">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <Label fx:id="regEmailLabel" layoutX="43.0" layoutY="239.0" text="Enter your email" textFill="#f5f0f0">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <TextField fx:id="regEmailField" layoutX="42.0" layoutY="256.0" onKeyReleased="#onKeyReleased" onMouseClicked="#onTextFieldClicked" prefHeight="25.0" prefWidth="249.0" />
+            <Label fx:id="regPasswordLabel" layoutX="41.0" layoutY="297.0" text="Enter your password" textFill="#ebe5e5">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <Button fx:id="regSubmitButton" layoutX="40.0" layoutY="373.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" prefHeight="25.0" prefWidth="249.0" style="-fx-background-color: #6495ED;" text="Submit" textFill="#f2f0f0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Label fx:id="userExistsLabel" alignment="CENTER" layoutX="37.0" layoutY="340.0" prefHeight="33.0" prefWidth="255.0" textFill="#f8f5f5" visible="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="regLoginButton" layoutX="42.0" layoutY="420.0" mnemonicParsing="false" onMouseClicked="#onLoginButtonClicked" prefHeight="39.0" prefWidth="249.0" style="-fx-background-color: #DC143C#DC143C;" text="Log in" textFill="#fcf3f3">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Label fx:id="regInvalidLoginLabel" alignment="CENTER" layoutX="213.0" layoutY="182.0" prefHeight="19.0" prefWidth="80.0" text="Invalid login" textFill="#f10a0a" visible="false">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="regInvalidEmailLabel" alignment="CENTER" layoutX="217.0" layoutY="239.0" text="Invalid email" textFill="#f10a0a" visible="false">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

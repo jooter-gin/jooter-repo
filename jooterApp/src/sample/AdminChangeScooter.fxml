@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="AdminChangeAnorchPane" prefHeight="668.0" prefWidth="594.0" style="-fx-background-color: #0f1f2a;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminChangeScooterController">
+    <children>
+        <Label fx:id="ProfProfileLabel" alignment="CENTER" layoutX="100.0" layoutY="28.0" prefHeight="50.0" prefWidth="404.0" text="UPDATE SCOOTER" textFill="#f5f2f2">
+            <font>
+                <Font name="DejaVu Sans Bold" size="36.0" />
+            </font>
+        </Label>
+        <TextField fx:id="ProfRangeField" layoutX="210.0" layoutY="230.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <TextField fx:id="ProfVelocityField" layoutX="210.0" layoutY="287.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <TextField fx:id="ProfColorField" layoutX="210.0" layoutY="350.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <TextField fx:id="ProfBasketField" layoutX="210.0" layoutY="408.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <TextField fx:id="ProfAvailabilityField" layoutX="210.0" layoutY="464.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <TextField fx:id="ProfPriceField" layoutX="210.0" layoutY="522.0" onMouseClicked="#onTextFieldsClicked" prefHeight="25.0" prefWidth="228.0" />
+        <Label fx:id="ProfRangeLabel" layoutX="210.0" layoutY="205.0" prefHeight="25.0" prefWidth="56.0" text="Range" textFill="WHITE" />
+        <Label fx:id="ProfVelocityLabel" layoutX="210.0" layoutY="262.0" prefHeight="25.0" prefWidth="56.0" text="Velocity" textFill="WHITE" />
+        <Label fx:id="ProfColorLabel" layoutX="210.0" layoutY="322.0" prefHeight="25.0" prefWidth="56.0" text="Color" textFill="WHITE" />
+        <Label fx:id="ProfAvailabilityLabel" layoutX="210.0" layoutY="439.0" prefHeight="25.0" prefWidth="64.0" text="Availability" textFill="WHITE" />
+        <Label fx:id="ProfBasketLabel" layoutX="210.0" layoutY="383.0" prefHeight="25.0" prefWidth="56.0" text="Basket" textFill="WHITE" />
+        <Label fx:id="ProfPriceLabel" layoutX="210.0" layoutY="497.0" prefHeight="25.0" prefWidth="56.0" text="Price" textFill="WHITE" />
+        <ImageView fx:id="ProfImage" fitHeight="121.0" fitWidth="103.0" layoutX="270.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@kick-scooter.png" />
+            </image></ImageView>
+        <Button fx:id="ProfButtonSave" layoutX="226.0" layoutY="571.0" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="42.0" prefWidth="197.0" text="SAVE" />
+        <Button fx:id="logoutButton" layoutX="531.0" layoutY="3.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" text="LOGOUT" />
+        <Button fx:id="backButton" layoutX="466.0" layoutY="3.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="25.0" prefWidth="56.0" text="BACK" />
+        <Label fx:id="infBasketLabel" layoutX="274.0" layoutY="387.0" text="Label" visible="false" />
+        <Label fx:id="infAvailabilityLabel" layoutX="274.0" layoutY="443.0" text="Label" visible="false" />
+        <Label fx:id="infPriceLabel" layoutX="274.0" layoutY="501.0" text="Label" visible="false" />
+        <Label fx:id="infColorLabel" layoutX="274.0" layoutY="326.0" text="Label" visible="false" />
+        <Label fx:id="infRangeLabel" layoutX="274.0" layoutY="209.0" text="Label" visible="false" />
+        <Label fx:id="infVelocityLabel" layoutX="274.0" layoutY="266.0" text="Label" visible="false" />
+    </children>
+</AnchorPane>

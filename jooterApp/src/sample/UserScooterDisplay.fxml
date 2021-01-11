@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="UsersScooterAnorchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="654.0" prefWidth="800.0" style="-fx-background-color: #0f1f2a;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UserScooterDisplayController">
+   <children>
+      <TableView fx:id="UserScootersTable" layoutX="2.0" layoutY="146.0" prefHeight="423.0" prefWidth="800.0">
+         <columns>
+            <TableColumn fx:id="UserScooterModel" prefWidth="161.0" text="Model" />
+            <TableColumn fx:id="UserScooterMaxVelocity" prefWidth="82.0" text="MaxVelocity" />
+            <TableColumn fx:id="UserScooterColor" prefWidth="113.0" text="Color" />
+            <TableColumn fx:id="UserScooterAvailability" prefWidth="127.0" text="Availability" />
+            <TableColumn fx:id="UserScooterBasket" prefWidth="73.0" text="Basket" />
+            <TableColumn fx:id="UserScooterRange" prefWidth="73.0" text="Range" />
+            <TableColumn fx:id="UserScooterPrice" prefWidth="78.0" text="Price" />
+            <TableColumn fx:id="UserScooterBattery" minWidth="-1.0" prefWidth="110.0" text="Battery" />
+         </columns>
+      </TableView>
+      <Label fx:id="UserLabel" alignment="CENTER" layoutX="218.0" layoutY="58.0" prefHeight="53.0" prefWidth="365.0" text="OUR SCOOTERS" textFill="#f5f2f2">
+         <font>
+            <Font name="DejaVu Sans Bold" size="36.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="UserScooterImage" fitHeight="102.0" fitWidth="108.0" layoutX="644.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@kick-scooter.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="rentButton" layoutX="310.0" layoutY="584.0" mnemonicParsing="false" onAction="#onRentButtonClicked" prefHeight="53.0" prefWidth="182.0" text="RENT" />
+      <ButtonBar fx:id="UserRentsMenuBar" buttonMinWidth="60.0" layoutX="1.0" prefHeight="29.0" prefWidth="800.0">
+         <buttons>
+            <Button fx:id="profileButton" mnemonicParsing="false" onAction="#onProfileButtonClicked" text="PROFILE" />
+            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onLogOutButtonClicked" text="LOG OUT">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <Button fx:id="Userrentsbutton" mnemonicParsing="false" onAction="#onMyScooterButtonClicked" text="RENTALS" />
+         </buttons>
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+      </ButtonBar>
+   </children>
+</AnchorPane>

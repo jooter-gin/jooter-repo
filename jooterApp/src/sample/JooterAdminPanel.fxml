@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="AdminOuterAnorchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminProfileController">
+    <children>
+        <AnchorPane fx:id="AdminFunctionalAnchorPane" prefHeight="520.0" prefWidth="195.0" style="-fx-background-color: #0f1f2a;">
+            <children>
+                <Button fx:id="AdminButtonAdd" layoutX="41.0" layoutY="196.0" mnemonicParsing="false" onAction="#onAddButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #33FF66;" text="ADD">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="AdminButtonDelete" layoutX="43.0" layoutY="260.0" mnemonicParsing="false" onAction="#onDeleteButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #FF0033;" text="DELETE">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="adminLogOutButton" layoutX="41.0" layoutY="442.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
+                <Button fx:id="adminUpdateButton" layoutX="43.0" layoutY="136.0" mnemonicParsing="false" onAction="#onUpdateButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #FF7F00;" text="UPDATE" />
+            </children>
+        </AnchorPane>
+        <TableView fx:id="AdminScootersTable" layoutX="195.0" prefHeight="520.0" prefWidth="711.0">
+            <columns>
+                <TableColumn fx:id="AdminScooterID" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="AdminScooterModel" prefWidth="98.0" text="Model" />
+                <TableColumn fx:id="AdminScooterMaxVelocity" prefWidth="89.0" text="Maxvelocity" />
+                <TableColumn fx:id="AdminScooterColor" prefWidth="54.0" text="Color" />
+                <TableColumn fx:id="AdminScooterAvailability" prefWidth="128.0" text="Availability" />
+                <TableColumn fx:id="AdminScooterBasket" prefWidth="52.0" text="Basket" />
+                <TableColumn fx:id="AdminScooterRange" prefWidth="54.0" text="Range" />
+                <TableColumn fx:id="AdminScooterPrice" prefWidth="73.0" text="Price" />
+                <TableColumn fx:id="AdminScooterBattery" prefWidth="87.0" text="Battery" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
