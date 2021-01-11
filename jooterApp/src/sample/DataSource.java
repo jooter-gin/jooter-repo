@@ -4,13 +4,13 @@ import java.sql.*;
 
 public final class DataSource {
 
-    private static final String DB_NAME = "zchmtson";
-//
-   private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
-
     //private static final String DB_NAME = "jooterExample";
 
-   // private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    //private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+
+    private static final String DB_NAME = "zchmtson";
+
+    private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -44,12 +44,17 @@ public final class DataSource {
 
     private PreparedStatement joinScootersOnRentals;
 
+    private PreparedStatement joinScootersHistory;
+
     private PreparedStatement queryScooter;
 
     private PreparedStatement updateReturnDate;
 
-    private PreparedStatement deleteFromRentals;
+    private PreparedStatement insertIntoRhistory;
 
+    private PreparedStatement queryRhistory;
+
+    private PreparedStatement deleteFromRhistory;
 
     public static final int REGULAR_ORDER = 1;
 
@@ -146,12 +151,12 @@ public final class DataSource {
 
     private static final String TABLE_RENTS = "Rents";
     private static final String COLUMN_RENTS_ID = "Id";
-    //private static final String COLUMN_RENTS_RENTALDATE = "RentalDate";
     private static final String COLUMN_RENTS_TIMESTAMP= "RentalTime";
     private static final String COLUMN_RENTS_RETURN_DATE = "ReturnDate";
     private static final String COLUMN_RENTS_IDUSER = "IdUser";
     private static final String COLUMN_RENTS_IDSCOOTER = "IdScooter";
-    //private static final String COLUMN_RENTS_IDAMDIN = "IdAdmin";
+    private static final String COLUMN_RENTS_BALANCE = "Balance";
+
 
     public static String getColumnRentsID() {return COLUMN_RENTS_ID;}
 
@@ -163,6 +168,7 @@ public final class DataSource {
             COLUMN_RENTS_RETURN_DATE + " TIMESTAMP , " +
             COLUMN_RENTS_IDUSER + " INT, "  +
             COLUMN_RENTS_IDSCOOTER + " INT, "  +
+            COLUMN_RENTS_BALANCE + " DOUBLE PRECISION, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDUSER + " ) REFERENCES " + TABLE_USERS + " ( " + COLUMN_USER_ID + " ) " + " ON DELETE SET NULL, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDSCOOTER + " ) REFERENCES " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_ID + " ) " + " ON DELETE SET NULL" + " ) ";
             //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
@@ -204,6 +210,22 @@ public final class DataSource {
             COLUMN_SCOOTER_PRICE + " DOUBLE PRECISION NOT NULL, " +
             COLUMN_SCOOTER_BATTERY + " INT NOT NULL )";
 
+    private static final String TABLE_RHISTORY = "Rhistory";
+
+    private final String CREATE_RHISTORY_TABLE = " CREATE TABLE IF NOT EXISTS " + " " + TABLE_RHISTORY +
+            "( " +
+            COLUMN_SCOOTER_MODEL + " varchar(20) NOT NULL, " +
+            COLUMN_SCOOTER_MAX_VELOCITY + " INT NOT NULL, "  +
+            COLUMN_SCOOTER_COLOR  + " varchar(20) NOT NULL, "  +
+            COLUMN_SCOOTER_BASKET + " INT NOT NULL, " +
+            COLUMN_SCOOTER_RANGE + " INT NOT NULL, " +
+            COLUMN_SCOOTER_PRICE + " INT NOT NULL, " +
+            COLUMN_SCOOTER_BATTERY + " INT NOT NULL , " +
+            COLUMN_RENTS_TIMESTAMP + " TIMESTAMP NOT NULL , " +
+            COLUMN_RENTS_RETURN_DATE + " TIMESTAMP , " +
+            COLUMN_RENTS_IDUSER + " INT, " +
+            COLUMN_RENTS_BALANCE + " DOUBLE PRECISION " +" ) ";
+
 
     public static String getColumnScooterId() {
         return COLUMN_SCOOTER_ID;
@@ -243,6 +265,10 @@ public final class DataSource {
 
     public static String getColumnRentsId() {
         return COLUMN_RENTS_ID;
+    }
+
+    public static String getColumnRentsBalance() {
+        return COLUMN_RENTS_BALANCE;
     }
 
     public static String getColumnRentsTimestamp() {
@@ -287,19 +313,26 @@ public final class DataSource {
     private static final String UPDATE_SCOOTER_AVAILABILITY = " UPDATE " + TABLE_SCOOTERS + " SET " +  COLUMN_SCOOTER_AVAILABILITY +   " = " + "  ?  " + " WHERE " + COLUMN_SCOOTER_ID + " = ? ";
 
     private static final String INSERT_INTO_RENTALS = " INSERT INTO " + TABLE_RENTS + " ( " + COLUMN_RENTS_TIMESTAMP + ", " + COLUMN_RENTS_IDUSER + ", " + COLUMN_RENTS_IDSCOOTER + " ) " +
-            "VALUES ( ? , ? , ? )";
+            "VALUES ( ? , ? , ?  )";
 
     private static final String UPDATE_RETURN_DATE = " UPDATE " + TABLE_RENTS + " SET " +   COLUMN_RENTS_RETURN_DATE +  " = " + " ( ? ) " + " WHERE " + COLUMN_RENTS_ID + " = ? ";
 
+    private static final String JOIN_SCOOTERS_ON_RENTALS = " SELECT " + TABLE_SCOOTERS+"." +COLUMN_SCOOTER_MODEL + ", " + TABLE_SCOOTERS +"."+COLUMN_SCOOTER_MAX_VELOCITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_COLOR + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_AVAILABILITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BASKET + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_RANGE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_PRICE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BATTERY + ", " + TABLE_RENTS+"."+COLUMN_RENTS_TIMESTAMP + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDUSER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + ", " + TABLE_RENTS + "." + COLUMN_RENTS_ID  + " FROM " + TABLE_SCOOTERS + " INNER JOIN " + TABLE_RENTS + " ON " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_ID + " = " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + " WHERE " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + " IS NULL " + " AND " + TABLE_RENTS + "." + COLUMN_RENTS_IDUSER + " = ? ";
 
-    private static final String JOIN_SCOOTERS_ON_RENTALS = " SELECT " + TABLE_SCOOTERS+"." +COLUMN_SCOOTER_MODEL + ", " + TABLE_SCOOTERS +"."+COLUMN_SCOOTER_MAX_VELOCITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_COLOR + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_AVAILABILITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BASKET + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_RANGE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_PRICE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BATTERY + ", " + TABLE_RENTS+"."+COLUMN_RENTS_TIMESTAMP + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDUSER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + ", " + TABLE_RENTS +"." + COLUMN_RENTS_ID  + " FROM " + TABLE_SCOOTERS + " INNER JOIN " + TABLE_RENTS + " ON " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_ID + " = " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + " WHERE "  + TABLE_RENTS + "." + COLUMN_RENTS_IDUSER + " = ? ";
+    private static final String JOIN_SCOOTERS_HISTORY = " SELECT " + TABLE_SCOOTERS+"." +COLUMN_SCOOTER_MODEL + ", " + TABLE_SCOOTERS +"."+COLUMN_SCOOTER_MAX_VELOCITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_COLOR + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_AVAILABILITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BASKET + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_RANGE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_PRICE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BATTERY + ", " + TABLE_RENTS+"."+COLUMN_RENTS_TIMESTAMP + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDUSER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + ", " + COLUMN_RENTS_BALANCE + " FROM " + TABLE_SCOOTERS + " INNER JOIN " + TABLE_RENTS + " ON " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_ID + " = " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + " WHERE " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + " IS NOT NULL " + " AND " + TABLE_RENTS + "." + COLUMN_RENTS_IDUSER + " = ? ";
 
-    private static final String DELETE_FROM_RENTS = " DELETE FROM " + TABLE_RENTS + " WHERE " + COLUMN_SCOOTER_ID + " = " + " ? ";
+    private static final String QUERY_RHISTORY = " SELECT * FROM " + TABLE_RHISTORY + " WHERE " + COLUMN_RENTS_IDUSER + " = " + " ? ";
 
     public ResultSet joinScooterOnRentals(int userID) throws SQLException{
 
         joinScootersOnRentals.setInt(1,userID);
         return joinScootersOnRentals.executeQuery();
+    }
+
+    public ResultSet joinScooterHistory(int userID) throws SQLException{
+
+        joinScootersHistory.setInt(1,userID);
+        return joinScootersHistory.executeQuery();
     }
 
     public ResultSet queryAdmins() throws SQLException{
@@ -324,6 +357,12 @@ public final class DataSource {
         return queryRents.executeQuery();
     }
 
+    public ResultSet queryRHistory(int userID) throws SQLException{
+
+        queryRhistory.setInt(1,userID);
+        return queryRhistory.executeQuery();
+    }
+
 
     private final String INSERT_INTO_USERS = " INSERT INTO " + TABLE_USERS + " ( "  + COLUMN_USER_NAME + ", " + COLUMN_USER_SURNAME + ", " + COLUMN_USER_LOGIN + ", " + COLUMN_USER_PASSWORD + ", " + COLUMN_USER_EMAIL + ", " + COLUMN_USER_CARD_NO + ", " + COLUMN_USER_ACC_BALANCE + " ) " +
             "VALUES ( ? , ? , ? , ?, ?, ?, ?)";
@@ -331,10 +370,36 @@ public final class DataSource {
     private final String INSERT_INTO_SCOOTERS =" INSERT INTO " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_MODEL +", " + COLUMN_SCOOTER_MAX_VELOCITY + ", " + COLUMN_SCOOTER_COLOR + ", " + COLUMN_SCOOTER_AVAILABILITY + ", " + COLUMN_SCOOTER_BASKET + ", " + COLUMN_SCOOTER_RANGE +", "+ COLUMN_SCOOTER_PRICE + ", " + COLUMN_SCOOTER_BATTERY + " ) " +
             "VALUES ( ? , ? , ? , ?, ?, ?, ?, ? )";
 
+    private final String INSERT_INTO_RHISTORY =" INSERT INTO " + TABLE_RHISTORY + " ( " + COLUMN_SCOOTER_MODEL + ", " + COLUMN_SCOOTER_MAX_VELOCITY + ", " + COLUMN_SCOOTER_COLOR + ", "  + COLUMN_SCOOTER_BASKET + ", " + COLUMN_SCOOTER_RANGE +", "+ COLUMN_SCOOTER_PRICE + ", " + COLUMN_SCOOTER_BATTERY + ", " + COLUMN_RENTS_IDUSER + ", " + COLUMN_RENTS_TIMESTAMP + ", " + COLUMN_RENTS_RETURN_DATE + "," + COLUMN_RENTS_BALANCE + " ) " +
+            "VALUES ( ? , ? , ? , ?, ?, ?, ?, ? , ? , ? , ? )";
+
 
     private final String DELETE_SCOOTER = " DELETE FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_ID + " = " + " ? ";
 
+    private final String DELETE_FROM_RHISTORY = " DELETE FROM " + TABLE_RHISTORY + " WHERE " + COLUMN_RENTS_IDUSER + " = " + " ? ";
 
+
+    public void insertIntoRhistory(ScooterJoin sj){
+
+        try {
+            insertIntoRhistory.setString(1, sj.getScooterModel());
+            insertIntoRhistory.setInt(2, sj.getScooterMaxVelocity());
+            insertIntoRhistory.setString(3,sj.getScooterColor());
+            insertIntoRhistory.setInt(4,sj.getScooterBasket());
+            insertIntoRhistory.setInt(5,sj.getScooterRange());
+            insertIntoRhistory.setDouble(6,sj.getScooterPrice());
+            insertIntoRhistory.setInt(7,sj.getScooterBattery());
+            insertIntoRhistory.setInt(8,sj.getUserID());
+            insertIntoRhistory.setTimestamp(9,sj.getRentalTime());
+            insertIntoRhistory.setTimestamp(10,sj.getReturnDate());
+            insertIntoRhistory.setDouble(11,sj.getBalance());
+            insertIntoRhistory.executeUpdate();
+            c.commit();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
 
     public void insertIntoRentals(Rent rent){
@@ -397,11 +462,11 @@ public final class DataSource {
 
     }
 
-    public void updateReturnDate(Timestamp tsp, int rentsID){
+    public void updateReturnDate(Timestamp tsp, int rentID){
 
         try {
             updateReturnDate.setTimestamp(1, tsp);
-            updateReturnDate.setInt(2,rentsID);
+            updateReturnDate.setInt(2,rentID);
             updateReturnDate.executeUpdate();
             c.commit();
 
@@ -425,6 +490,7 @@ public final class DataSource {
         }
 
     }
+
 
     public void insertUsers(User user){
 
@@ -497,11 +563,13 @@ public final class DataSource {
     }
 
 
-    public void deleteFromRentals (ScooterJoin sj) {
+
+    public void deleteFromRhistory (int userID) {
 
         try {
-            c.setAutoCommit(false);
-            deleteFromRentals.setInt(1,sj.getRentsScooterID());
+
+            deleteFromRhistory.setInt(1,userID);
+            deleteFromRhistory.executeUpdate();
             c.commit();
 
 
@@ -510,6 +578,7 @@ public final class DataSource {
             e.printStackTrace();
         }
     }
+
 
     public void deleteScooter (int scooterId) {
 
@@ -526,6 +595,8 @@ public final class DataSource {
         }
     }
 
+
+
     public void open () {
 
         try{
@@ -536,7 +607,9 @@ public final class DataSource {
             stm.executeUpdate(CREATE_ADMINS_TABLE);
             stm.executeUpdate(CREATE_SCOOTERS_TABLE);
             stm.executeUpdate(CREATE_RENTS_TABLE);
+            stm.executeUpdate(CREATE_RHISTORY_TABLE);
             c.commit();
+            stm.close();
 
             insertIntoUsers = c.prepareStatement(INSERT_INTO_USERS);
             insertIntoScooters = c.prepareStatement(INSERT_INTO_SCOOTERS);
@@ -551,13 +624,13 @@ public final class DataSource {
             updateScooterAvailability = c.prepareStatement(UPDATE_SCOOTER_AVAILABILITY);
             insertIntoRentals = c.prepareStatement(INSERT_INTO_RENTALS);
             joinScootersOnRentals = c.prepareStatement(JOIN_SCOOTERS_ON_RENTALS);
+            joinScootersHistory = c.prepareStatement(JOIN_SCOOTERS_HISTORY);
             queryScooter = c.prepareStatement(QUERY_SCOOTER);
             updateScooterss = c.prepareStatement(UPDATE_SCOOTERSS);
             updateReturnDate = c.prepareStatement(UPDATE_RETURN_DATE);
-            deleteFromRentals = c.prepareStatement(DELETE_FROM_RENTS);
-
-            stm.close();
-
+            insertIntoRhistory = c.prepareStatement(INSERT_INTO_RHISTORY);
+            queryRhistory = c.prepareStatement(QUERY_RHISTORY);
+            deleteFromRhistory = c.prepareStatement(DELETE_FROM_RHISTORY);
 
         } catch (SQLException e) {
 
@@ -583,9 +656,12 @@ public final class DataSource {
             updateScooterAvailability.close();
             insertIntoRentals.close();
             joinScootersOnRentals.close();
+            joinScootersHistory.close();
             queryScooter.close();
             updateReturnDate.close();
-            deleteFromRentals.close();
+            insertIntoRhistory.close();
+            queryRhistory.close();
+            deleteFromRhistory.close();
             c.close();
 
         }catch(SQLException e){

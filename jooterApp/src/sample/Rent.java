@@ -1,5 +1,7 @@
 package sample;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class Rent {
@@ -8,9 +10,17 @@ public class Rent {
     private int userID;
     private int rentScooterID;
     private Timestamp rentalTime;
+    private Timestamp returnDate;
 
+    public Timestamp getReturnDate() {
+        return returnDate;
+    }
 
-public Rent(){
+    public void setReturnDate(Timestamp returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public Rent(){
 
 
 }
@@ -64,5 +74,13 @@ public Rent(){
         DataSource.getInstance().insertIntoRentals(rent);
     }
 
+    public static ResultSet joinScooterOnRentals(){
 
+    try {
+      return   DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
+    }catch(SQLException e){
+        e.printStackTrace();
+    }
+    return null;
+    }
 }

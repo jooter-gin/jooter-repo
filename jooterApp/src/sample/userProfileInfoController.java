@@ -107,4 +107,9 @@ public class userProfileInfoController {
 
     }
 
+	public void onDeleteAccountButtonClicked(){
+
+    DataSource.getInstance().deleteFromRhistory(LoginController.getUserID());
+
+    }
 }

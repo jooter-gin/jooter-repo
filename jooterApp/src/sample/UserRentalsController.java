@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,7 +23,7 @@ public class UserRentalsController {
     Stage stage = new Stage();
     Parent root;
     private static ObservableList<ScooterJoin> scooterJoinData;
-
+    private static ObservableList<ScooterJoin> scooterHistoryData;
 
     @FXML
     Button UserRentsBackButton = new Button();
@@ -41,7 +40,7 @@ public class UserRentalsController {
     @FXML
     TableColumn<ScooterJoin,String> UserRentsColor = new TableColumn<>();
     @FXML
-    TableColumn<ScooterJoin,String> UserRentsBasket = new TableColumn<>();
+    TableColumn<ScooterJoin,Integer> UserRentsBasket = new TableColumn<>();
     @FXML
     TableColumn<ScooterJoin,Integer> UserRentsRange = new TableColumn<>();
     @FXML
@@ -49,18 +48,18 @@ public class UserRentalsController {
     @FXML
     TableColumn<ScooterJoin,Integer> UserRentsBattery = new TableColumn<>();
     @FXML
-    TableColumn <ScooterJoin,Integer> UserRentsDate = new TableColumn<>();
-    @FXML
-    TableColumn<ScooterJoin,Timestamp> returnDateColumn = new TableColumn<>();
+    TableColumn <ScooterJoin,Timestamp> UserRentsDate = new TableColumn<>();
     @FXML
     Button UserRentsReturnButton = new Button();
-
+    @FXML
+    Button historyButton = new Button();
 
 
 
     public void initialize(){
 
         scooterJoinData = FXCollections.observableArrayList();
+
 
         try {
             ResultSet joinSet = DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
@@ -92,37 +91,57 @@ public class UserRentalsController {
             UserRentsPrice.setCellValueFactory(new PropertyValueFactory<>("scooterPrice"));
             UserRentsBattery.setCellValueFactory(new PropertyValueFactory<>("scooterBattery"));
             UserRentsDate.setCellValueFactory(new PropertyValueFactory<>("rentalTime"));
-            returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
+
+
 
         }catch(SQLException e){
             e.printStackTrace();
         }
 
+    }
+
+    public void onHistoryButtonClicked(){
+
+        try {
+            Stage appStage = (Stage)UserRentsAnorchPane.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("UserHistoryScene.fxml"));
+            Scene scene = new Scene(root);
+            appStage.setScene(scene);
+            appStage.show();
+
+        }catch (IOException e){
+
+            e.printStackTrace();
+        }
 
 
     }
+
 
     public void onReturnButtonClicked(){
 
         if(UserRentsTable.getSelectionModel().getSelectedItem() != null) {
 
-            ScooterJoin sj = UserRentsTable.getSelectionModel().getSelectedItem();
-            int scooterId = sj.getRentsScooterID();
-            int rentsID = sj.getRentsID();
-            Timestamp returnDate = sj.getReturnDate();
-            if(returnDate == null) {
+                ScooterJoin sj = UserRentsTable.getSelectionModel().getSelectedItem();
+                int scooterID = sj.getRentsScooterID();
                 Scooter scooter = new Scooter();
-                scooter.setScooterID(scooterId);
+                scooter.setScooterID(scooterID);
                 scooter.setScooterAvailability(1);
                 DataSource.getInstance().updateScooterAvailability(scooter);
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // czas oddania
+                sj.setReturnDate(timestamp);
+                sj.setUserID(LoginController.getUserID());
+                int rentsID = sj.getRentsID();
+                sj.setBalance(0.0);
                 DataSource.getInstance().updateReturnDate(timestamp, rentsID);
+                DataSource.getInstance().insertIntoRhistory(sj);
                 scooterJoinData.clear();
+
 
                 try {
 
                     ResultSet joinSet = DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
-                    while (joinSet.next()) {
+                    while(joinSet.next()){
 
                         ScooterJoin sjj = new ScooterJoin();
                         sjj.setScooterModel(joinSet.getString(DataSource.getColumnScooterModel()));
@@ -142,19 +161,8 @@ public class UserRentalsController {
 
 
                 } catch (SQLException e) {
-
-
                     e.printStackTrace();
                 }
-
-            }else{
-
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
-                alert.setHeaderText("Scooter already returned");
-                alert.showAndWait();
-
-            }
 
         }
     }
