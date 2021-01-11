@@ -8,9 +8,9 @@ public final class DataSource {
 //
    private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    //private static final String DB_NAME = "jooterExample";
+    //private static final String DB_NAME = "Jooter";
 
-   // private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    //private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -49,6 +49,8 @@ public final class DataSource {
     private PreparedStatement updateReturnDate;
 
     private PreparedStatement deleteFromRentals;
+
+    private PreparedStatement deleteFromUsers;
 
 
     public static final int REGULAR_ORDER = 1;
@@ -163,7 +165,7 @@ public final class DataSource {
             COLUMN_RENTS_RETURN_DATE + " TIMESTAMP , " +
             COLUMN_RENTS_IDUSER + " INT, "  +
             COLUMN_RENTS_IDSCOOTER + " INT, "  +
-            " FOREIGN KEY ( " + COLUMN_RENTS_IDUSER + " ) REFERENCES " + TABLE_USERS + " ( " + COLUMN_USER_ID + " ) " + " ON DELETE SET NULL, " +
+            " FOREIGN KEY ( " + COLUMN_RENTS_IDUSER + " ) REFERENCES " + TABLE_USERS + " ( " + COLUMN_USER_ID + " ) " + " ON DELETE CASCADE, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDSCOOTER + " ) REFERENCES " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_ID + " ) " + " ON DELETE SET NULL" + " ) ";
             //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
 
@@ -296,6 +298,8 @@ public final class DataSource {
 
     private static final String DELETE_FROM_RENTS = " DELETE FROM " + TABLE_RENTS + " WHERE " + COLUMN_SCOOTER_ID + " = " + " ? ";
 
+    private static final String DELETE_FROM_USERS = " DELETE FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = " + " ? ";
+
     public ResultSet joinScooterOnRentals(int userID) throws SQLException{
 
         joinScootersOnRentals.setInt(1,userID);
@@ -335,6 +339,18 @@ public final class DataSource {
     private final String DELETE_SCOOTER = " DELETE FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_ID + " = " + " ? ";
 
 
+    public void deleteFromUsers(int userID){
+
+        try{
+            deleteFromUsers.setInt(1,userID);
+            deleteFromUsers.executeUpdate();
+            c.commit();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
 
 
     public void insertIntoRentals(Rent rent){
@@ -537,6 +553,7 @@ public final class DataSource {
             stm.executeUpdate(CREATE_SCOOTERS_TABLE);
             stm.executeUpdate(CREATE_RENTS_TABLE);
             c.commit();
+            stm.close();
 
             insertIntoUsers = c.prepareStatement(INSERT_INTO_USERS);
             insertIntoScooters = c.prepareStatement(INSERT_INTO_SCOOTERS);
@@ -555,8 +572,8 @@ public final class DataSource {
             updateScooterss = c.prepareStatement(UPDATE_SCOOTERSS);
             updateReturnDate = c.prepareStatement(UPDATE_RETURN_DATE);
             deleteFromRentals = c.prepareStatement(DELETE_FROM_RENTS);
+            deleteFromUsers = c.prepareStatement(DELETE_FROM_USERS);
 
-            stm.close();
 
 
         } catch (SQLException e) {
@@ -586,6 +603,7 @@ public final class DataSource {
             queryScooter.close();
             updateReturnDate.close();
             deleteFromRentals.close();
+            deleteFromUsers.close();
             c.close();
 
         }catch(SQLException e){
