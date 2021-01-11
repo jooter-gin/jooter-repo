@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -60,7 +61,6 @@ public class UserRentalsController {
 
         scooterJoinData = FXCollections.observableArrayList();
 
-
         try {
             ResultSet joinSet = DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
             while(joinSet.next()){
@@ -78,6 +78,7 @@ public class UserRentalsController {
                 sj.setReturnDate(joinSet.getTimestamp(DataSource.getColumnRentsReturnDate()));
                 sj.setScooterAvailability(joinSet.getInt(DataSource.getColumnScooterAvailability()));
                 sj.setRentsID(joinSet.getInt(DataSource.getColumnRentsId()));
+                sj.setBalance(joinSet.getDouble(DataSource.getColumnRentsBalance()));
                 scooterJoinData.add(sj);
 
             }
@@ -117,50 +118,72 @@ public class UserRentalsController {
 
     }
 
-
     public void onReturnButtonClicked(){
 
         if(UserRentsTable.getSelectionModel().getSelectedItem() != null) {
 
-                ScooterJoin sj = UserRentsTable.getSelectionModel().getSelectedItem();
-                int scooterID = sj.getRentsScooterID();
-                Scooter scooter = new Scooter();
-                scooter.setScooterID(scooterID);
-                scooter.setScooterAvailability(1);
-                DataSource.getInstance().updateScooterAvailability(scooter);
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // czas oddania
-                sj.setReturnDate(timestamp);
-                sj.setUserID(LoginController.getUserID());
-                int rentsID = sj.getRentsID();
-                sj.setBalance(0.0);
-                DataSource.getInstance().updateReturnDate(timestamp, rentsID);
-                DataSource.getInstance().insertIntoRhistory(sj);
-                scooterJoinData.clear();
+            ScooterJoin sj = UserRentsTable.getSelectionModel().getSelectedItem();
+            int scooterId = sj.getRentsScooterID();
+            int rentsID = sj.getRentsID();
+            Timestamp returnDate = sj.getReturnDate();
+            Timestamp rentalDate = sj.getRentalTime();
+            long diffTime;
+            double price = sj.getScooterPrice();
+            Scooter scooter = new Scooter();
+            scooter.setScooterID(scooterId);
+            scooter.setScooterAvailability(1);
+            diffTime = System.currentTimeMillis() - rentalDate.getTime();
+            int battery=sj.getScooterBattery();
+            while (diffTime>0){
+                battery-=10;
+                scooter.setScooterBattery(battery);
+                diffTime-=3600000;
+            }
+            scooter.setScooterBattery(scooter.getScooterBattery());
+            DataSource.getInstance().updateScooterAvailability(scooter);
+            DataSource.getInstance().updateScooterBattery(scooter);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            sj.setReturnDate(timestamp);
+            sj.setUserID(LoginController.getUserID());
+            DataSource.getInstance().updateReturnDate(timestamp, rentsID);
+            long milliseconds = rentalDate.getTime() - timestamp.getTime();
+            int seconds = (int) milliseconds / 1000;
+            int hours = -(seconds / 3600);
+            int minutes = -((seconds % 3600) / 60);
+            seconds = -((seconds % 3600) % 60);
+            double cost = price * minutes;
+            double roundOff = Math.round(cost * 100.0) / 100.0;
+            DataSource.getInstance().updateRentsBalance(roundOff,rentsID);
+            User.subtractFromBalance(roundOff,LoginController.getUserID());
+            DataSource.getInstance().insertIntoRhistory(sj);
+            scooterJoinData.clear();
 
+            try {
 
-                try {
+                ResultSet joinSet = DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
+                while (joinSet.next()) {
 
-                    ResultSet joinSet = DataSource.getInstance().joinScooterOnRentals(LoginController.getUserID());
-                    while(joinSet.next()){
+                    ScooterJoin sjj = new ScooterJoin();
+                    sjj.setScooterModel(joinSet.getString(DataSource.getColumnScooterModel()));
+                    sjj.setScooterMaxVelocity(joinSet.getInt(DataSource.getColumnScooterMaxVelocity()));
+                    sjj.setScooterColor(joinSet.getString(DataSource.getColumnScooterColor()));
+                    sjj.setScooterBasket(joinSet.getInt(DataSource.getColumnScooterBasket()));
+                    sjj.setScooterRange(joinSet.getInt(DataSource.getColumnScooterRange()));
+                    sjj.setScooterPrice(joinSet.getDouble(DataSource.getColumnScooterPrice()));
+                    sjj.setScooterBattery(joinSet.getInt(DataSource.getColumnScooterBattery()));
+                    sjj.setRentalTime(joinSet.getTimestamp(DataSource.getColumnRentsTimestamp()));
+                    sjj.setRentsScooterID(joinSet.getInt(DataSource.getColumnRentsIdscooter()));
+                    sjj.setReturnDate(joinSet.getTimestamp(DataSource.getColumnRentsReturnDate()));
+                    sjj.setRentsID(joinSet.getInt(DataSource.getColumnRentsId()));
+                    sjj.setBalance(joinSet.getDouble(DataSource.getColumnRentsBalance()));
+                    scooterJoinData.add(sjj);
 
-                        ScooterJoin sjj = new ScooterJoin();
-                        sjj.setScooterModel(joinSet.getString(DataSource.getColumnScooterModel()));
-                        sjj.setScooterMaxVelocity(joinSet.getInt(DataSource.getColumnScooterMaxVelocity()));
-                        sjj.setScooterColor(joinSet.getString(DataSource.getColumnScooterColor()));
-                        sjj.setScooterBasket(joinSet.getInt(DataSource.getColumnScooterBasket()));
-                        sjj.setScooterRange(joinSet.getInt(DataSource.getColumnScooterRange()));
-                        sjj.setScooterPrice(joinSet.getDouble(DataSource.getColumnScooterPrice()));
-                        sjj.setScooterBattery(joinSet.getInt(DataSource.getColumnScooterBattery()));
-                        sjj.setRentalTime(joinSet.getTimestamp(DataSource.getColumnRentsTimestamp()));
-                        sjj.setRentsScooterID(joinSet.getInt(DataSource.getColumnRentsIdscooter()));
-                        sjj.setReturnDate(joinSet.getTimestamp(DataSource.getColumnRentsReturnDate()));
-                        sjj.setRentsID(joinSet.getInt(DataSource.getColumnRentsId()));
-                        scooterJoinData.add(sjj);
-
-                    }
+                }
 
 
                 } catch (SQLException e) {
+
+
                     e.printStackTrace();
                 }
 
@@ -200,3 +223,4 @@ public class UserRentalsController {
     }
 
 }
+

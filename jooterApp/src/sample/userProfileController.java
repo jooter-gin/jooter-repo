@@ -57,32 +57,32 @@ public class userProfileController {
 
 
 
-public void onBackButtonClicked(){
+    public void onBackButtonClicked(){
 
-    try{
+        try{
 
-        root = FXMLLoader.load(getClass().getResource("jooterProfileInfo.fxml"));
-        stage.setScene(new Scene(root));
-        stage.show();
-        ProfProfileAnchorPane.getScene().getWindow().hide();
+            root = FXMLLoader.load(getClass().getResource("jooterProfileInfo.fxml"));
+            stage.setScene(new Scene(root));
+            stage.show();
+            ProfProfileAnchorPane.getScene().getWindow().hide();
 
-    }catch(IOException e){
+        }catch(IOException e){
 
-        e.printStackTrace();
+            e.printStackTrace();
+        }
+
     }
 
-}
+    public void onTextFieldsClicked(){
 
-public void onTextFieldsClicked(){
+        infPassLabel.setVisible(false);
+        infEmailLabel.setVisible(false);
+        infLoginLabel.setVisible(false);
+        infCardNoLabel.setVisible(false);
+        infNameLabel.setVisible(false);
+        infSurnameLabel.setVisible(false);
 
-    infPassLabel.setVisible(false);
-    infEmailLabel.setVisible(false);
-    infLoginLabel.setVisible(false);
-    infCardNoLabel.setVisible(false);
-    infNameLabel.setVisible(false);
-    infSurnameLabel.setVisible(false);
-
-}
+    }
 
 
     public void onLogOutButtonClicked(){
@@ -108,233 +108,233 @@ public void onTextFieldsClicked(){
         ResultSet rs;
 
 
-       String name = ProfNameField.getText();
-       String surname = ProfSurnameField.getText();
-       String login = ProfLoginField.getText();
-       String email = ProfEmailField.getText();
-       String password = ProfPasswordField.getText();
-       String cardNo = ProfCardNrField.getText();
+        String name = ProfNameField.getText();
+        String surname = ProfSurnameField.getText();
+        String login = ProfLoginField.getText();
+        String email = ProfEmailField.getText();
+        String password = ProfPasswordField.getText();
+        String cardNo = ProfCardNrField.getText();
 
-       User user = new User();
+        User user = new User();
 
-       if(!(name.isEmpty() || name.trim().isEmpty())){
+        if(!(name.isEmpty() || name.trim().isEmpty())){
 
-           user.setUserName(name);
-           infNameLabel.setText("Name has been changed");
-           infNameLabel.setTextFill(Color.GREEN);
-           infNameLabel.setVisible(true);
+            user.setUserName(name);
+            infNameLabel.setText("Name has been changed");
+            infNameLabel.setTextFill(Color.GREEN);
+            infNameLabel.setVisible(true);
 
-
-       }else{
-
-           try {
-
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserName(rs.getString(DataSource.getColumnUserName()));
-
-           }catch(SQLException e){
-               e.printStackTrace();
-           }
-
-
-       }
-
-       if(!(surname.isEmpty() || surname.trim().isEmpty())){
-
-           user.setUserSurname(surname);
-           infSurnameLabel.setText("Surname has been changed");
-           infSurnameLabel.setTextFill(Color.GREEN);
-           infSurnameLabel.setVisible(true);
 
         }else{
 
-           try {
+            try {
 
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserSurname(rs.getString(DataSource.getColumnUserSurname()));
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserName(rs.getString(DataSource.getColumnUserName()));
 
-           }catch(SQLException e){
-
-               e.printStackTrace();
-           }
-
-       }
-
-       if(!(login.isEmpty() || login.trim().isEmpty())){
-
-           if(Validate.validateUserLogin(login)) {
-
-               user.setUserLogin(login);
-               infLoginLabel.setText("Login has been changed");
-               infLoginLabel.setTextFill(Color.GREEN);
-               infLoginLabel.setVisible(true);
-
-           }else{
-
-               try {
-
-                   rs = DataSource.getInstance().queryUser(userID);
-                   rs.next();
-                   user.setUserLogin(rs.getString(DataSource.getColumnUserLogin()));
-
-               }catch(SQLException e){
-
-                   e.printStackTrace();
-               }
-
-               infLoginLabel.setTextFill(Color.RED);
-               infLoginLabel.setText("Invalid login");
-               infLoginLabel.setVisible(true);
-
-           }
-
-       }else{
-
-           try {
-
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserLogin(rs.getString(DataSource.getColumnUserLogin()));
-
-           }catch(SQLException e){
-
-               e.printStackTrace();
-           }
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
 
 
-       }
+        }
 
-       if(!(password.isEmpty() || password.trim().isEmpty())){
+        if(!(surname.isEmpty() || surname.trim().isEmpty())){
 
-           if(Validate.validateUserPassword(password)) {
-               user.setUserPassword(password);
-               infPassLabel.setText("Password has been changed");
-               infPassLabel.setTextFill(Color.GREEN);
-               infPassLabel.setVisible(true);
+            user.setUserSurname(surname);
+            infSurnameLabel.setText("Surname has been changed");
+            infSurnameLabel.setTextFill(Color.GREEN);
+            infSurnameLabel.setVisible(true);
 
-           }else{
+        }else{
 
-               try {
-                   rs = DataSource.getInstance().queryUser(userID);
-                   rs.next();
-                   user.setUserPassword(rs.getString(DataSource.getColumnUserPassword()));
+            try {
 
-               }catch(SQLException e){
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserSurname(rs.getString(DataSource.getColumnUserSurname()));
 
-                   e.printStackTrace();
-               }
+            }catch(SQLException e){
 
-               infPassLabel.setText("Invalid password");
-               infPassLabel.setTextFill(Color.RED);
-               infPassLabel.setVisible(true);
+                e.printStackTrace();
+            }
 
-           }
+        }
 
-       }else{
+        if(!(login.isEmpty() || login.trim().isEmpty())){
 
-           try {
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserPassword(rs.getString(DataSource.getColumnUserPassword()));
+            if(Validate.validateUserLogin(login)) {
 
-           }catch(SQLException e){
+                user.setUserLogin(login);
+                infLoginLabel.setText("Login has been changed");
+                infLoginLabel.setTextFill(Color.GREEN);
+                infLoginLabel.setVisible(true);
 
-               e.printStackTrace();
-           }
+            }else{
 
-       }
+                try {
 
-       if(!(email.isEmpty() || email.trim().isEmpty())){
-           if(Validate.validateEmail(email)) {
+                    rs = DataSource.getInstance().queryUser(userID);
+                    rs.next();
+                    user.setUserLogin(rs.getString(DataSource.getColumnUserLogin()));
 
-               user.setUserEmail(email);
-               infEmailLabel.setText("Email has been changed");
-               infEmailLabel.setTextFill(Color.GREEN);
-               infEmailLabel.setVisible(true);
+                }catch(SQLException e){
 
-           }else{
+                    e.printStackTrace();
+                }
 
-               try {
-                   rs = DataSource.getInstance().queryUser(userID);
-                   rs.next();
-                   user.setUserEmail(rs.getString(DataSource.getColumnUserEmail()));
+                infLoginLabel.setTextFill(Color.RED);
+                infLoginLabel.setText("Invalid login");
+                infLoginLabel.setVisible(true);
 
-               }catch(SQLException e){
+            }
 
-                   e.printStackTrace();
-               }
+        }else{
 
-               infEmailLabel.setText("Invalid email");
-               infEmailLabel.setTextFill(Color.RED);
-               infEmailLabel.setVisible(true);
+            try {
 
-           }
-       }else{
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserLogin(rs.getString(DataSource.getColumnUserLogin()));
 
-           try {
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserEmail(rs.getString(DataSource.getColumnUserEmail()));
+            }catch(SQLException e){
 
-           }catch(SQLException e){
-
-               e.printStackTrace();
-           }
-
-       }
-
-       if(!(cardNo.isEmpty() || cardNo.trim().isEmpty())){
-
-           if(Validate.validateCardNumber(cardNo)) {
-
-               user.setUserCardNo(cardNo);
-               infCardNoLabel.setText("Card number has been changed");
-               infCardNoLabel.setTextFill(Color.GREEN);
-               infCardNoLabel.setVisible(true);
-
-           }else{
-
-               try {
-                   rs = DataSource.getInstance().queryUser(userID);
-                   rs.next();
-                   user.setUserCardNo(rs.getString(DataSource.getColumnUserCardNo()));
-
-               }catch(SQLException e){
-
-                   e.printStackTrace();
-               }
-
-               infCardNoLabel.setText("Invalid card number");
-               infCardNoLabel.setTextFill(Color.RED);
-               infCardNoLabel.setVisible(true);
-
-           }
-
-       }else{
-
-           try {
-               rs = DataSource.getInstance().queryUser(userID);
-               rs.next();
-               user.setUserCardNo(rs.getString(DataSource.getColumnUserCardNo()));
-
-           }catch(SQLException e){
-
-               e.printStackTrace();
-           }
-       }
+                e.printStackTrace();
+            }
 
 
-       user.setUserId(userID);
-       DataSource.getInstance().updateUser(user);
-       ProfPasswordField.clear();
-       ProfEmailField.clear();
-       ProfLoginField.clear();
-       ProfNameField.clear();
-       ProfSurnameField.clear();
-       ProfCardNrField.clear();
-      // System.out.println("ID IS " + userID + " " + user.getUserName() + " " + user.getUserSurname() +" " + user.getUserLogin()+ " "+user.getUserPassword()+" "+user.getUserCardNo());
+        }
+
+        if(!(password.isEmpty() || password.trim().isEmpty())){
+
+            if(Validate.validateUserPassword(password)) {
+                user.setUserPassword(password);
+                infPassLabel.setText("Password has been changed");
+                infPassLabel.setTextFill(Color.GREEN);
+                infPassLabel.setVisible(true);
+
+            }else{
+
+                try {
+                    rs = DataSource.getInstance().queryUser(userID);
+                    rs.next();
+                    user.setUserPassword(rs.getString(DataSource.getColumnUserPassword()));
+
+                }catch(SQLException e){
+
+                    e.printStackTrace();
+                }
+
+                infPassLabel.setText("Invalid password");
+                infPassLabel.setTextFill(Color.RED);
+                infPassLabel.setVisible(true);
+
+            }
+
+        }else{
+
+            try {
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserPassword(rs.getString(DataSource.getColumnUserPassword()));
+
+            }catch(SQLException e){
+
+                e.printStackTrace();
+            }
+
+        }
+
+        if(!(email.isEmpty() || email.trim().isEmpty())){
+            if(Validate.validateEmail(email)) {
+
+                user.setUserEmail(email);
+                infEmailLabel.setText("Email has been changed");
+                infEmailLabel.setTextFill(Color.GREEN);
+                infEmailLabel.setVisible(true);
+
+            }else{
+
+                try {
+                    rs = DataSource.getInstance().queryUser(userID);
+                    rs.next();
+                    user.setUserEmail(rs.getString(DataSource.getColumnUserEmail()));
+
+                }catch(SQLException e){
+
+                    e.printStackTrace();
+                }
+
+                infEmailLabel.setText("Invalid email");
+                infEmailLabel.setTextFill(Color.RED);
+                infEmailLabel.setVisible(true);
+
+            }
+        }else{
+
+            try {
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserEmail(rs.getString(DataSource.getColumnUserEmail()));
+
+            }catch(SQLException e){
+
+                e.printStackTrace();
+            }
+
+        }
+
+        if(!(cardNo.isEmpty() || cardNo.trim().isEmpty())){
+
+            if(Validate.validateCardNumber(cardNo)) {
+
+                user.setUserCardNo(cardNo);
+                infCardNoLabel.setText("Card number has been changed");
+                infCardNoLabel.setTextFill(Color.GREEN);
+                infCardNoLabel.setVisible(true);
+
+            }else{
+
+                try {
+                    rs = DataSource.getInstance().queryUser(userID);
+                    rs.next();
+                    user.setUserCardNo(rs.getString(DataSource.getColumnUserCardNo()));
+
+                }catch(SQLException e){
+
+                    e.printStackTrace();
+                }
+
+                infCardNoLabel.setText("Invalid card number");
+                infCardNoLabel.setTextFill(Color.RED);
+                infCardNoLabel.setVisible(true);
+
+            }
+
+        }else{
+
+            try {
+                rs = DataSource.getInstance().queryUser(userID);
+                rs.next();
+                user.setUserCardNo(rs.getString(DataSource.getColumnUserCardNo()));
+
+            }catch(SQLException e){
+
+                e.printStackTrace();
+            }
+        }
+
+
+        user.setUserId(userID);
+        DataSource.getInstance().updateUser(user);
+        ProfPasswordField.clear();
+        ProfEmailField.clear();
+        ProfLoginField.clear();
+        ProfNameField.clear();
+        ProfSurnameField.clear();
+        ProfCardNrField.clear();
+        // System.out.println("ID IS " + userID + " " + user.getUserName() + " " + user.getUserSurname() +" " + user.getUserLogin()+ " "+user.getUserPassword()+" "+user.getUserCardNo());
 
     }
 

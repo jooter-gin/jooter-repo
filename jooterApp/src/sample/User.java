@@ -1,5 +1,8 @@
 package sample;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class User extends Validate {
 
     private int userId;
@@ -89,7 +92,24 @@ public class User extends Validate {
         this.userAccountBalance = userAccountBalance;
     }
 
+    public static void subtractFromBalance(double amount, int userID){
 
+        double balance;
+        double result;
+
+        try {
+            ResultSet rs = DataSource.getInstance().queryUserBalance(userID);
+            rs.next();
+            balance = rs.getDouble(DataSource.getColumnUserAccBalance());
+            result = balance - amount;
+            DataSource.getInstance().updateUserAccBalance(result,userID);
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 }

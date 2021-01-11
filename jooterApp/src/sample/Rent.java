@@ -11,7 +11,15 @@ public class Rent {
     private int rentScooterID;
     private Timestamp rentalTime;
     private Timestamp returnDate;
+    private Double balance;
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
     public Timestamp getReturnDate() {
         return returnDate;
     }
@@ -20,7 +28,7 @@ public class Rent {
         this.returnDate = returnDate;
     }
 
-    public Rent(){
+public Rent(){
 
 
 }

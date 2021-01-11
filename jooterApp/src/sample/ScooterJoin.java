@@ -19,7 +19,6 @@ public class ScooterJoin {
     private int rentsID;
     private int userID;
     private Double balance;
-
     public Double getBalance() {
         return balance;
     }
