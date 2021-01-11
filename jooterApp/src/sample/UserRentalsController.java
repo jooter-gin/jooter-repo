@@ -153,6 +153,7 @@ public class UserRentalsController {
             seconds = -((seconds % 3600) % 60);
             double cost = price * minutes;
             double roundOff = Math.round(cost * 100.0) / 100.0;
+            sj.setBalance(cost);
             DataSource.getInstance().updateRentsBalance(roundOff,rentsID);
             User.subtractFromBalance(roundOff,LoginController.getUserID());
             DataSource.getInstance().insertIntoRhistory(sj);
