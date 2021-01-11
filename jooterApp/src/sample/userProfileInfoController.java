@@ -38,6 +38,8 @@ public class userProfileInfoController {
     @FXML
     Button backButton = new Button();
 
+    @FXML Label balanceLabel = new Label();
+
 
     public void initialize(){
 
@@ -49,9 +51,8 @@ public class userProfileInfoController {
                 surnameDataLabel.setText(rs.getString(DataSource.getColumnUserSurname()));
                 loginDataLabel.setText(rs.getString(DataSource.getColumnUserLogin()));
                 emailDataLabel.setText(rs.getString(DataSource.getColumnUserEmail()));
-                //passwordDataLabel.setText(rs.getString(DataSource.getColumnUserPassword()));
                 cardNoDataLabel.setText(rs.getString(DataSource.getColumnUserCardNo()));
-
+                balanceLabel.setText(rs.getString(DataSource.getColumnUserAccBalance()));
             }
         }catch (SQLException e){
 

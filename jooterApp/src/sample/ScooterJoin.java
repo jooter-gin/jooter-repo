@@ -17,7 +17,15 @@ public class ScooterJoin {
     private Timestamp returnDate;
     private int scooterAvailability;
     private int rentsID;
+    private Double balance;
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 
     public int getRentsID() {
         return rentsID;

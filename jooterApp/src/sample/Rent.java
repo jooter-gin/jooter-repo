@@ -8,12 +8,20 @@ public class Rent {
     private int userID;
     private int rentScooterID;
     private Timestamp rentalTime;
+    private Double balance;
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Rent(){
 
 
-public Rent(){
-
-
-}
+    }
 
     public int getRentID() {
         return rentID;

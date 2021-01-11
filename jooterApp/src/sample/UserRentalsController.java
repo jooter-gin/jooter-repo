@@ -79,6 +79,7 @@ public class UserRentalsController {
                 sj.setReturnDate(joinSet.getTimestamp(DataSource.getColumnRentsReturnDate()));
                 sj.setScooterAvailability(joinSet.getInt(DataSource.getColumnScooterAvailability()));
                 sj.setRentsID(joinSet.getInt(DataSource.getColumnRentsId()));
+                sj.setBalance(joinSet.getDouble(DataSource.getColumnRentsBalance()));
                 scooterJoinData.add(sj);
 
             }
@@ -111,12 +112,26 @@ public class UserRentalsController {
             int rentsID = sj.getRentsID();
             Timestamp returnDate = sj.getReturnDate();
             if(returnDate == null) {
+                double price = sj.getScooterPrice();
                 Scooter scooter = new Scooter();
                 scooter.setScooterID(scooterId);
                 scooter.setScooterAvailability(1);
                 DataSource.getInstance().updateScooterAvailability(scooter);
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 DataSource.getInstance().updateReturnDate(timestamp, rentsID);
+                Timestamp rentalDate = sj.getRentalTime();
+                long milliseconds = rentalDate.getTime() - timestamp.getTime();
+                int seconds = (int) milliseconds / 1000;
+                int hours = -(seconds / 3600);
+                int minutes = -((seconds % 3600) / 60);
+                seconds = -((seconds % 3600) % 60);
+                double cost = price * minutes;
+                double roundOff = Math.round(cost * 100.0) / 100.0;
+                //System.out.println("The price is " +price);
+                //System.out.println("The cost is " +roundOff);
+                DataSource.getInstance().updateRentsBalance(roundOff,rentsID);
+                System.out.println("hours " + hours + " minutes " + minutes + " seconds " + seconds);
+                User.subtractFromBalance(roundOff,LoginController.getUserID());
                 scooterJoinData.clear();
 
                 try {
@@ -136,6 +151,7 @@ public class UserRentalsController {
                         sjj.setRentsScooterID(joinSet.getInt(DataSource.getColumnRentsIdscooter()));
                         sjj.setReturnDate(joinSet.getTimestamp(DataSource.getColumnRentsReturnDate()));
                         sjj.setRentsID(joinSet.getInt(DataSource.getColumnRentsId()));
+                        sjj.setBalance(joinSet.getDouble(DataSource.getColumnRentsBalance()));
                         scooterJoinData.add(sjj);
 
                     }

@@ -148,44 +148,44 @@ public class UserScooterDisplayController {
         if (UserScootersTable.getSelectionModel().getSelectedItem() != null) {
             Scooter scooter = UserScootersTable.getSelectionModel().getSelectedItem();
 
-                scooterIndex = scooter.getScooterID();
-                int scooterAvailability = scooter.getScooterAvailability();
-                if(scooterAvailability==1) {
-                    System.out.println(scooter.getScooterID());
-                    scooter.setScooterAvailability(0);
-                    ScooterManagement.updateScooterAvailability(scooter);
-                    Rent rent = new Rent();
-                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                    rent.setRentalTime(timestamp);
-                    rent.setUserID(LoginController.getUserID());
-                    rent.setRentScooterID(scooterIndex);
-                    Rent.insertIntoRentals(rent);
+            scooterIndex = scooter.getScooterID();
+            int scooterAvailability = scooter.getScooterAvailability();
+            if(scooterAvailability==1) {
+                System.out.println(scooter.getScooterID());
+                scooter.setScooterAvailability(0);
+                ScooterManagement.updateScooterAvailability(scooter);
+                Rent rent = new Rent();
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                rent.setRentalTime(timestamp);
+                rent.setUserID(LoginController.getUserID());
+                rent.setRentScooterID(scooterIndex);
+                Rent.insertIntoRentals(rent);
 
 
-                    data.clear();
+                data.clear();
 
 
-                    try {
-                        ResultSet rs = DataSource.getInstance().queryScooters();
-                        while (rs.next()) {
+                try {
+                    ResultSet rs = DataSource.getInstance().queryScooters();
+                    while (rs.next()) {
 
-                            data.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getDouble(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
+                        data.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getDouble(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
 
-                        }
-
-                    } catch (SQLException e) {
-                        System.out.println("Cant query scooters");
-                        e.printStackTrace();
                     }
-                }else{
 
-
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText("Scooter not available");
-                    alert.showAndWait();
-
+                } catch (SQLException e) {
+                    System.out.println("Cant query scooters");
+                    e.printStackTrace();
                 }
+            }else{
+
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("Scooter not available");
+                alert.showAndWait();
+
+            }
         }
     }
 
