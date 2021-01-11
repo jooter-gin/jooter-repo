@@ -18,6 +18,11 @@
                         <Font size="14.0" />
                     </font>
                 </Button>
+                <Button fx:id="AdminButtonLoad" layoutX="43.0" layoutY="340.0" mnemonicParsing="false" onAction="#onLoadButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #1E90FF;" text="LOAD BATTERY">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Button>
                 <Button fx:id="adminLogOutButton" layoutX="41.0" layoutY="442.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
                 <Button fx:id="adminUpdateButton" layoutX="43.0" layoutY="136.0" mnemonicParsing="false" onAction="#onUpdateButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #FF7F00;" text="UPDATE" />
             </children>

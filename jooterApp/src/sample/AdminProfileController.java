@@ -64,6 +64,8 @@ public class AdminProfileController {
     Button adminLogOutButton = new Button();
     @FXML
     Button adminUpdateButton = new Button();
+    @FXML
+    Button AdminButtonLoad = new Button();
 
     public TableView<Scooter> getAdminScootersTable() {
         return AdminScootersTable;
@@ -82,7 +84,7 @@ public class AdminProfileController {
     @FXML
     TableColumn<Scooter,Integer> AdminScooterRange = new TableColumn<>();
     @FXML
-    TableColumn<Scooter,Double> AdminScooterPrice = new TableColumn<>();
+    TableColumn<Scooter,Integer> AdminScooterPrice = new TableColumn<>();
     @FXML
     TableColumn<Scooter,Integer> AdminScooterBattery = new TableColumn<>();
     @FXML
@@ -101,7 +103,7 @@ public class AdminProfileController {
             ResultSet rs = DataSource.getInstance().queryScooters();
             while(rs.next()){
 
-                adminData.add(new Scooter(rs.getInt(DataSource.getColumnAdminID()),rs.getString(DataSource.getColumnScooterModel()),rs.getInt(DataSource.getColumnScooterMaxVelocity()),rs.getString(DataSource.getColumnScooterColor()),rs.getInt(DataSource.getColumnScooterAvailability()),rs.getInt(DataSource.getColumnScooterBasket()),rs.getInt(DataSource.getColumnScooterRange()),rs.getDouble(DataSource.getColumnScooterPrice()),rs.getInt(DataSource.getColumnScooterBattery())));
+                adminData.add(new Scooter(rs.getInt(DataSource.getColumnAdminID()),rs.getString(DataSource.getColumnScooterModel()),rs.getInt(DataSource.getColumnScooterMaxVelocity()),rs.getString(DataSource.getColumnScooterColor()),rs.getInt(DataSource.getColumnScooterAvailability()),rs.getInt(DataSource.getColumnScooterBasket()),rs.getInt(DataSource.getColumnScooterRange()),rs.getInt(DataSource.getColumnScooterPrice()),rs.getInt(DataSource.getColumnScooterBattery())));
 
             }
 
@@ -126,18 +128,18 @@ public class AdminProfileController {
 
     public void onAddButtonClicked(){
 
-    try{
+        try{
 
-        Parent root = FXMLLoader.load(getClass().getResource("scooterAddingPanel.fxml"));
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-        AdminOuterAnorchPane.getScene().getWindow().hide();
+            Parent root = FXMLLoader.load(getClass().getResource("scooterAddingPanel.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            AdminOuterAnorchPane.getScene().getWindow().hide();
 
 
-    }catch(IOException e){
-        e.printStackTrace();
-    }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -154,7 +156,7 @@ public class AdminProfileController {
                     ResultSet rs = DataSource.getInstance().queryScooters();
                     while (rs.next()) {
 
-                        adminData.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getDouble(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
+                        adminData.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getInt(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
 
                     }
 
@@ -194,18 +196,37 @@ public class AdminProfileController {
         if (AdminScootersTable.getSelectionModel().getSelectedItem() != null) {
             Scooter scooter = AdminScootersTable.getSelectionModel().getSelectedItem();
             scooterIndex = scooter.getScooterID();
+            System.out.println(scooterIndex);
 
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("AdminChangeScooter.fxml"));
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+                AdminOuterAnorchPane.getScene().getWindow().hide();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("AdminChangeScooter.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-            AdminOuterAnorchPane.getScene().getWindow().hide();
+    }
+    public void onLoadButtonClicked(){
+        if(AdminScootersTable.getSelectionModel().getSelectedItem() != null) {
+            Scooter scooter = AdminScootersTable.getSelectionModel().getSelectedItem();
+            scooterIndex = scooter.getScooterID();
+            scooter.setScooterBattery(100);
+            DataSource.getInstance().updateScooterBattery(scooter);
+            adminData.clear();
+            try {
+                ResultSet rs = DataSource.getInstance().queryScooters();
+                while (rs.next()) {
+                    adminData.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getInt(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
+                }
 
-        }catch(IOException e){
-            e.printStackTrace();
+            } catch (SQLException e) {
+                System.out.println("Cant query scooters");
+                e.printStackTrace();
+            }
         }
-
     }
 }
