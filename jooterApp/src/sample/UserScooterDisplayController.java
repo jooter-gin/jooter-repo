@@ -62,7 +62,210 @@ public class UserScooterDisplayController {
     Button rentButton = new Button();
     @FXML
     Button Userrentsbutton = new Button();
+    @FXML
+    Button filterButton = new Button();
+    @FXML
+    MenuButton menuButton = new MenuButton();
+    @FXML
+    TextField filterTextField = new TextField();
 
+    private int option = 5;
+
+    public void onFilterButtonClicked(){
+
+        String input = filterTextField.getText().trim();
+        ResultSet rs = null;
+        boolean isChanged = false;
+
+        if(!input.isEmpty() || option == 0) {
+
+            switch (option) {
+
+                case 0:
+
+                    try {
+                        rs = DataSource.getInstance().queryScooters();
+                        isChanged = true;
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+
+                case 1:
+                    if (Validate.isNumeric(input)) {
+
+                        if (Integer.parseInt(input) == 1 || Integer.parseInt(input) == 0) {
+
+                            try {
+                                rs = DataSource.getInstance().selectAva(Integer.parseInt(input));
+                                isChanged = true;
+
+                            } catch (SQLException e) {
+
+                                e.printStackTrace();
+                            }
+                        } else {
+
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Warning Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Invalid data type. Insert 0 or 1");
+                            alert.showAndWait();
+
+                        }
+
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Warning Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Invalid data type. Insert 0 or 1");
+                        alert.showAndWait();
+                    }
+
+                    break;
+
+                case 2:
+
+                    if(!(Validate.hasSpace(input))) {
+
+                        try {
+                            rs = DataSource.getInstance().selectColor(input);
+                            isChanged = true;
+
+                        } catch (SQLException e) {
+
+                            e.printStackTrace();
+                        }
+                    }else{
+
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Warning Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Color name cannot contain whitespaces");
+                        alert.showAndWait();
+                    }
+                    break;
+
+                case 3:
+
+                    if (Validate.isNumeric(input)) {
+
+                        try {
+                            rs = DataSource.getInstance().selectPrice(Double.parseDouble(input));
+                            isChanged = true;
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Warning Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Invalid data type. Insert a number");
+                        alert.showAndWait();
+                    }
+
+                    break;
+
+                case 4:
+
+                    if (Validate.isNumeric(input)) {
+
+                        try {
+                            rs = DataSource.getInstance().selectRange(Integer.parseInt(input));
+                            isChanged = true;
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Warning Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Invalid data type. Insert a number");
+                        alert.showAndWait();
+                    }
+            }
+
+            if (isChanged) {
+
+                System.out.println("Hello");
+
+                try {
+
+                    if (rs.isBeforeFirst()) {
+                        System.out.println(rs.isBeforeFirst());
+                        data.clear();
+
+                        try {
+
+                            while (rs.next()) {
+
+                                data.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getDouble(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
+                            }
+                            rs.close();
+                            UserScootersTable.setItems(data);
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setContentText("No matches found");
+                        alert.showAndWait();
+
+                    }
+
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+
+            filterTextField.clear();
+
+        }else{
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(null);
+            alert.setContentText("Please insert a parameter or choose \"Show all\" option");
+            alert.showAndWait();
+
+        }
+
+
+    }
+
+    public void onMenuButtonClicked0(){
+
+        this.option = 0;
+    }
+
+    public void onMenuButtonClicked1(){
+
+        this.option = 1;
+    }
+
+    public void onMenuButtonClicked2(){
+
+        this.option = 2;
+    }
+
+    public void onMenuButtonClicked3(){
+
+        this.option = 3;
+    }
+
+    public void onMenuButtonClicked4(){
+
+        this.option = 4;
+    }
 
     public void onMyScooterButtonClicked(){
 
@@ -98,7 +301,9 @@ public class UserScooterDisplayController {
     }
 
 
+
     public void initialize() {
+
 
         data = FXCollections.observableArrayList();
 
@@ -126,6 +331,10 @@ public class UserScooterDisplayController {
         UserScooterBattery.setCellValueFactory(new PropertyValueFactory<>("scooterBattery"));
 
     }
+
+
+
+
 
 
     public void onProfileButtonClicked() {
