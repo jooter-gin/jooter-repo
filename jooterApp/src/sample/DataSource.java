@@ -4,13 +4,13 @@ import java.sql.*;
 
 public final class DataSource {
 
-    private static final String DB_NAME = "zchmtson";
+    //private static final String DB_NAME = "zchmtson";
 //
-   private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+   //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    //private static final String DB_NAME = "jooterExample";
+    private static final String DB_NAME = "jooter";
 
-   // private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -60,7 +60,11 @@ public final class DataSource {
 
     private PreparedStatement updateUserAccBalance;
 
+    private PreparedStatement updateUserAccFunds;
+
     private PreparedStatement queryUserBalance;
+
+    private PreparedStatement queryUserFunds;
 
     private PreparedStatement queryRhistory;
 
@@ -89,6 +93,7 @@ public final class DataSource {
     private static final String COLUMN_USER_EMAIL = "Email";
     private static final String COLUMN_USER_CARD_NO = "CardNo";
     private static final String COLUMN_USER_ACC_BALANCE = "AccountBalance";
+    private static final String COLUMN_USER_ACC_FUNDS  = "AccountFunds";
 
     public static String getColumnUserLogin() {
         return COLUMN_USER_LOGIN;
@@ -120,6 +125,10 @@ public final class DataSource {
 
     public static String getColumnUserAccBalance() {
         return COLUMN_USER_ACC_BALANCE;
+    }
+
+    public static String getColumnUserAccFunds() {
+        return COLUMN_USER_ACC_FUNDS;
     }
 
     private static final String TABLE_ADMINS = "Admins";
@@ -198,6 +207,7 @@ public final class DataSource {
             COLUMN_USER_PASSWORD  + " varchar(20) NOT NULL, "  +
             COLUMN_USER_EMAIL + " varchar(20) NOT NULL, " +
             COLUMN_USER_CARD_NO + " varchar(20) NOT NULL, " +
+            COLUMN_USER_ACC_FUNDS + " DOUBLE PRECISION NOT NULL, " +
             COLUMN_USER_ACC_BALANCE + " DOUBLE PRECISION NOT NULL )";
 
     private final String CREATE_ADMINS_TABLE = "CREATE TABLE IF NOT EXISTS " + " " + TABLE_ADMINS +
@@ -309,9 +319,13 @@ public final class DataSource {
 
     private static final String QUERY_USER_BALANCE = " SELECT " + COLUMN_USER_ACC_BALANCE + " FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = ? " ;
 
+    private static final String QUERY_USER_FUNDS = " SELECT " + COLUMN_USER_ACC_FUNDS + " FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = ? " ;
+
     private static final String UPDATE_RENTS_BALANCE = " UPDATE " + TABLE_RENTS + " SET " + COLUMN_RENTS_BALANCE + " = " + " ? " + " WHERE " + COLUMN_RENTS_ID + " = ? ";
 
     private static final String UPDATE_USER_ACC_BALANCE = " UPDATE " + TABLE_USERS + " SET " +   COLUMN_USER_ACC_BALANCE +  " = " + " ( ? ) " + " WHERE " + COLUMN_USER_ID + " = ? ";
+
+    private static final String UPDATE_USER_ACC_FUNDS = " UPDATE " + TABLE_USERS + " SET " +   COLUMN_USER_ACC_FUNDS +  " = " + " ( ? ) " + " WHERE " + COLUMN_USER_ID + " = ? ";
 
     private static final String QUERY_USER = " SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = ? " ;
 
@@ -385,12 +399,29 @@ public final class DataSource {
         return  queryUserBalance.executeQuery();
     }
 
+    public ResultSet queryUserFunds(int userID) throws SQLException{
+        queryUserFunds.setInt(1,userID);
+        return  queryUserFunds.executeQuery();
+    }
+
     public void updateUserAccBalance(double amount, int userID){
 
         try {
             updateUserAccBalance.setDouble(1, amount);
             updateUserAccBalance.setInt(2, userID);
             updateUserAccBalance.executeUpdate();
+            c.commit();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void UpdateUserAccFunds(double amount, int userID){
+
+        try {
+            updateUserAccFunds.setDouble(1, amount);
+            updateUserAccFunds.setInt(2, userID);
+            updateUserAccFunds.executeUpdate();
             c.commit();
 
         }catch (SQLException e){
@@ -404,8 +435,8 @@ public final class DataSource {
     }
 
 
-    private final String INSERT_INTO_USERS = " INSERT INTO " + TABLE_USERS + " ( "  + COLUMN_USER_NAME + ", " + COLUMN_USER_SURNAME + ", " + COLUMN_USER_LOGIN + ", " + COLUMN_USER_PASSWORD + ", " + COLUMN_USER_EMAIL + ", " + COLUMN_USER_CARD_NO + ", " + COLUMN_USER_ACC_BALANCE + " ) " +
-            "VALUES ( ? , ? , ? , ?, ?, ?, ?)";
+    private final String INSERT_INTO_USERS = " INSERT INTO " + TABLE_USERS + " ( "  + COLUMN_USER_NAME + ", " + COLUMN_USER_SURNAME + ", " + COLUMN_USER_LOGIN + ", " + COLUMN_USER_PASSWORD + ", " + COLUMN_USER_EMAIL + ", " + COLUMN_USER_CARD_NO + ", " + COLUMN_USER_ACC_BALANCE + ", " + COLUMN_USER_ACC_FUNDS + " ) " +
+            "VALUES ( ? , ? , ? , ?, ?, ?, ?, ?)";
 
     private final String INSERT_INTO_SCOOTERS =" INSERT INTO " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_MODEL +", " + COLUMN_SCOOTER_MAX_VELOCITY + ", " + COLUMN_SCOOTER_COLOR + ", " + COLUMN_SCOOTER_AVAILABILITY + ", " + COLUMN_SCOOTER_BASKET + ", " + COLUMN_SCOOTER_RANGE +", "+ COLUMN_SCOOTER_PRICE + ", " + COLUMN_SCOOTER_BATTERY + " ) " +
             "VALUES ( ? , ? , ? , ?, ?, ?, ?, ? )";
@@ -585,6 +616,7 @@ public final class DataSource {
             insertIntoUsers.setString(5, user.getUserEmail());
             insertIntoUsers.setString(6, user.getUserCardNo());
             insertIntoUsers.setDouble(7, user.getUserAccountBalance());
+            insertIntoUsers.setDouble(8, user.getUserAccountFunds());
             int affectedRows =  insertIntoUsers.executeUpdate();
             if(affectedRows==1) {
                 c.commit();
@@ -679,7 +711,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "zchmtson", "eidFBsA6ftUlntzXqXBjWrnBwEuXra3h");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "haslo");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
@@ -713,7 +745,9 @@ public final class DataSource {
             deleteFromRhistory = c.prepareStatement(DELETE_FROM_RHISTORY);
             updateRentsBalance = c.prepareStatement(UPDATE_RENTS_BALANCE);
             updateUserAccBalance = c.prepareStatement(UPDATE_USER_ACC_BALANCE);
+            updateUserAccFunds = c.prepareStatement(UPDATE_USER_ACC_FUNDS);
             queryUserBalance = c.prepareStatement(QUERY_USER_BALANCE);
+            queryUserFunds = c.prepareStatement(QUERY_USER_FUNDS);
             deleteFromUsers = c.prepareStatement(DELETE_FROM_USERS);
 
 
@@ -748,7 +782,9 @@ public final class DataSource {
             updateReturnDate.close();
             deleteFromUsers.close();
             updateUserAccBalance.close();
+            updateUserAccFunds.close();
             queryUserBalance.close();
+            queryUserFunds.close();
             insertIntoRhistory.close();
             queryRhistory.close();
             deleteFromRhistory.close();

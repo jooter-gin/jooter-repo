@@ -41,8 +41,10 @@ public class userProfileInfoController {
     Button backButton = new Button();
     @FXML
     Button deleteAccButton = new Button();
-
-    @FXML Label balanceLabel = new Label();
+    @FXML
+    Label balanceLabel = new Label();
+    @FXML
+    Label fundsLabel = new Label();
 
 
     public void initialize(){
@@ -57,6 +59,7 @@ public class userProfileInfoController {
                 emailDataLabel.setText(rs.getString(DataSource.getColumnUserEmail()));
                 cardNoDataLabel.setText(rs.getString(DataSource.getColumnUserCardNo()));
                 balanceLabel.setText(rs.getString(DataSource.getColumnUserAccBalance()));
+                fundsLabel.setText(rs.getString(DataSource.getColumnUserAccFunds()));
             }
         }catch (SQLException e){
 
@@ -135,6 +138,18 @@ public class userProfileInfoController {
                 }
 
             }
+        }
+    }
+    public void onAddFundsButtonClicked(){
+        try {
+
+            root = FXMLLoader.load(getClass().getResource("UserAddFunds.fxml"));
+            stage.setScene(new Scene(root));
+            stage.show();
+            ProfProfileAnchorPane.getScene().getWindow().hide();
+
+        }catch(IOException e){
+            System.out.println("Error");
         }
     }
 }
