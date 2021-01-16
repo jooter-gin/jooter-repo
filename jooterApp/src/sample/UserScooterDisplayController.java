@@ -68,16 +68,20 @@ public class UserScooterDisplayController {
     MenuButton menuButton = new MenuButton();
     @FXML
     TextField filterTextField = new TextField();
+    @FXML
+    TextField filterTextField2 = new TextField();
 
     private int option = 5;
+
 
     public void onFilterButtonClicked(){
 
         String input = filterTextField.getText().trim();
+        String input2 = filterTextField2.getText().trim();
         ResultSet rs = null;
         boolean isChanged = false;
 
-        if(!input.isEmpty() || option == 0) {
+        if(!input.isEmpty() || option == 0 || option == 5) {
 
             switch (option) {
 
@@ -173,33 +177,52 @@ public class UserScooterDisplayController {
 
                 case 4:
 
-                    if (Validate.isNumeric(input)) {
+                    if(!input2.isEmpty()) {
 
-                        try {
-                            rs = DataSource.getInstance().selectRange(Integer.parseInt(input));
-                            isChanged = true;
+                        if (Validate.isNumeric(input) && Validate.isNumeric(input2)) {
 
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                            try {
+                                rs = DataSource.getInstance().selectRange(Integer.parseInt(input),Integer.parseInt(input2));
+                                isChanged = true;
+
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Warning Dialog");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Invalid data type. Insert a number");
+                            alert.showAndWait();
                         }
-                    } else {
+
+                    }else{
 
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Warning Dialog");
                         alert.setHeaderText(null);
-                        alert.setContentText("Invalid data type. Insert a number");
+                        alert.setContentText("Please insert both parameters or choose \"Show all\" option");
                         alert.showAndWait();
+
                     }
+                    break;
+
+                case 5:
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please choose an option from Filter options menu");
+                    alert.showAndWait();
+                    break;
             }
 
             if (isChanged) {
 
-                System.out.println("Hello");
-
                 try {
 
                     if (rs.isBeforeFirst()) {
-                        System.out.println(rs.isBeforeFirst());
+
                         data.clear();
 
                         try {
@@ -229,12 +252,18 @@ public class UserScooterDisplayController {
             }
 
             filterTextField.clear();
+            filterTextField2.clear();
 
         }else{
 
+            filterTextField2.clear();
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(null);
-            alert.setContentText("Please insert a parameter or choose \"Show all\" option");
+            if(option == 4 ) {
+                alert.setContentText("Please insert both parameters or choose \"Show all\" option");
+            }else{
+                alert.setContentText("Please insert a parameter or choose \"Show all\" option");
+            }
             alert.showAndWait();
 
         }
@@ -245,26 +274,36 @@ public class UserScooterDisplayController {
     public void onMenuButtonClicked0(){
 
         this.option = 0;
+        filterTextField2.setVisible(false);
+        filterTextField.setVisible(false);
     }
 
     public void onMenuButtonClicked1(){
 
         this.option = 1;
+        filterTextField2.setVisible(false);
+        filterTextField.setVisible(true);
     }
 
     public void onMenuButtonClicked2(){
 
         this.option = 2;
+        filterTextField2.setVisible(false);
+        filterTextField.setVisible(true);
     }
 
     public void onMenuButtonClicked3(){
 
         this.option = 3;
+        filterTextField2.setVisible(false);
+        filterTextField.setVisible(true);
     }
 
     public void onMenuButtonClicked4(){
 
         this.option = 4;
+        filterTextField2.setVisible(true);
+        filterTextField.setVisible(true);
     }
 
     public void onMyScooterButtonClicked(){

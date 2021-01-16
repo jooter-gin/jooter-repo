@@ -363,9 +363,9 @@ public final class DataSource {
 
     private static final String SELECT_PRICE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_PRICE + " = ?";
 
-    private static final String SELECT_AVA =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_AVAILABILITY + " = ?";
+    private static final String SELECT_AVA =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_AVAILABILITY + " = ? ";
 
-    private static final String SELECT_RANGE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_RANGE + " = ?";
+    private static final String SELECT_RANGE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_RANGE + " BETWEEN " + " ? " + " AND " + " ? ";
 
 
 
@@ -462,9 +462,10 @@ public final class DataSource {
 
     }
 
-    public ResultSet selectRange(int range) throws SQLException{
+    public ResultSet selectRange(int range1,int range2) throws SQLException{
 
-        selectRange.setInt(1, range);
+        selectRange.setInt(1,range1);
+        selectRange.setInt(2,range2);
         return selectRange.executeQuery();
     }
 
@@ -804,11 +805,6 @@ public final class DataSource {
             insertIntoRhistory.close();
             queryRhistory.close();
             deleteFromRhistory.close();
-            selectRange.close();
-            selectColor.close();
-            selectAvaliability.close();
-            selectMaxVelocity.close();
-            selectPrice.close();
             c.close();
 
         }catch(SQLException e){
