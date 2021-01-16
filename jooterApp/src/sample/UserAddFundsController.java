@@ -80,17 +80,27 @@ public class UserAddFundsController {
         ResultSet rs;
         String amount = AmountField.getText();
         User user = new User();
+        double funds;
+        double result;
 
         if(!(amount.isEmpty() || amount.trim().isEmpty())){
             if(Validate.isNumeric(amount) && parseDouble(amount)<1000) {
+                try {
+                    user.setUserAccountFunds(parseDouble(amount));
+                    infAmountLabel.setText("Funds has been added");
+                    infAmountLabel.setTextFill(Color.GREEN);
+                    infAmountLabel.setVisible(true);
+                    user.setUserId(userID);
+                    AmountField.clear();
+                    rs = DataSource.getInstance().queryUserFunds(userID);
+                    rs.next();
+                    funds = rs.getDouble(DataSource.getColumnUserAccFunds());
+                    result = funds + parseDouble(amount);
+                    DataSource.getInstance().UpdateUserAccFunds(result,userID);
 
-                user.setUserAccountFunds(parseDouble(amount));
-                infAmountLabel.setText("Funds has been added");
-                infAmountLabel.setTextFill(Color.GREEN);
-                infAmountLabel.setVisible(true);
-                user.setUserId(userID);
-                DataSource.getInstance().UpdateUserAccFunds(parseDouble(amount),userID);
-                AmountField.clear();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
             }
             else{
                 try {
