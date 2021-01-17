@@ -4,17 +4,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+
+import static java.lang.Double.parseDouble;
+import static java.lang.Math.abs;
 
 public class userProfileInfoController {
 
@@ -45,6 +50,8 @@ public class userProfileInfoController {
     Label balanceLabel = new Label();
     @FXML
     Label fundsLabel = new Label();
+    @FXML
+    Label infBalanceLabel = new Label();
 
 
     public void initialize(){
@@ -151,5 +158,34 @@ public class userProfileInfoController {
         }catch(IOException e){
             System.out.println("Error");
         }
+    }
+    public void onPayButtonClicked() throws SQLException {
+        User user = new User();
+        int userID = LoginController.getUserID();
+        user.setUserId(userID);
+        ResultSet rs;
+        rs = DataSource.getInstance().queryUserBalance(userID);
+        rs.next();
+        ResultSet rs2;
+        rs2 = DataSource.getInstance().queryUserFunds(userID);
+        rs2.next();
+        if(rs2.getDouble(userID)>=abs(rs.getDouble(userID))){
+            DataSource.getInstance().UpdateUserAccFunds(rs2.getDouble(userID)+rs.getDouble(userID),userID);
+            DataSource.getInstance().updateUserAccBalance(0,userID);
+            ResultSet rsnew;
+            rsnew = DataSource.getInstance().queryUserBalance(userID);
+            rsnew.next();
+            ResultSet rs2new;
+            rs2new = DataSource.getInstance().queryUserFunds(userID);
+            rs2new.next();
+            balanceLabel.setText(rsnew.getString(DataSource.getColumnUserAccBalance()));
+            fundsLabel.setText(rs2new.getString(DataSource.getColumnUserAccFunds()));
+        }
+        else{
+            infBalanceLabel.setTextFill(Color.RED);
+            infBalanceLabel.setText("Niewystarczająca ilość środków!");
+            infBalanceLabel.setVisible(true);
+        }
+
     }
 }

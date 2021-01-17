@@ -8,7 +8,7 @@ public final class DataSource {
 //
    //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    private static final String DB_NAME = "jooter";
+    private static final String DB_NAME = "Jooter2";
 
     private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
@@ -711,7 +711,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "haslo");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "123");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
