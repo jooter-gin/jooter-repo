@@ -64,6 +64,22 @@ public class UserScooterDisplayController {
     Button Userrentsbutton = new Button();
 
 
+    public void onReportButtonClicked(){
+
+        try{
+
+            root = FXMLLoader.load(getClass().getResource("reportScene.fxml"));
+            stage.setScene(new Scene(root));
+            stage.show();
+            UsersScooterAnorchPane.getScene().getWindow().hide();
+
+        }catch(IOException e){
+
+            e.printStackTrace();
+        }
+
+    }
+
     public void onMyScooterButtonClicked(){
 
         try{

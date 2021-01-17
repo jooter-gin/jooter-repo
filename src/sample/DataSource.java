@@ -4,13 +4,13 @@ import java.sql.*;
 
 public final class DataSource {
 
-    private static final String DB_NAME = "zchmtson";
+    // private static final String DB_NAME = "zchmtson";
 //
-   private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+    // private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    //private static final String DB_NAME = "jooterExample";
+    private static final String DB_NAME = "jooterExample";
 
-   // private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -169,12 +169,29 @@ public final class DataSource {
     //private static final String COLUMN_RENTS_IDAMDIN = "IdAdmin";
     private static final String COLUMN_RENTS_BALANCE = "Balance";
 
+    private static final String TABLE_REPORTS = "Reports";
+    private static final String COLUMN_REPORTS_ID = "ID";
+    private static final String COLUMN_REPORTS_USER_ID = "UserID";
+    private static final String COLUMN_REPORT_SUBMISSION_DATE = "SubmissionDate";
+    private static final String COLUMN_REPORTS_TEXT = "ReportText";
+    private static final String COLUMN_REPORTS_TITLE = "ReportTitle";
+
+    private final String CREATE_REPORTS_TABLE = "CREATE TABLE IF NOT EXISTS " + " " + TABLE_REPORTS +
+            "(" +
+            COLUMN_REPORTS_ID + " SERIAL PRIMARY KEY, " +
+            COLUMN_REPORTS_USER_ID + " INT NOT NULL, " +
+            COLUMN_REPORT_SUBMISSION_DATE + " TIMESTAMP NOT NULL, "+
+            COLUMN_REPORTS_TITLE + " TEXT NOT NULL, " +
+            COLUMN_REPORTS_TEXT + " TEXT NOT NULL " + " ) ";
+
+
+
     public static String getColumnRentsID() {return COLUMN_RENTS_ID;}
 
     private final String CREATE_RENTS_TABLE = " CREATE TABLE IF NOT EXISTS " + " " + TABLE_RENTS +
             "( " +
             COLUMN_RENTS_ID + " SERIAL PRIMARY KEY, " +
-           // COLUMN_RENTS_RENTALDATE + " DATE NOT NULL, " +
+            // COLUMN_RENTS_RENTALDATE + " DATE NOT NULL, " +
             COLUMN_RENTS_TIMESTAMP + " TIMESTAMP NOT NULL , " +
             COLUMN_RENTS_RETURN_DATE + " TIMESTAMP , " +
             COLUMN_RENTS_IDUSER + " INT, "  +
@@ -182,7 +199,7 @@ public final class DataSource {
             COLUMN_RENTS_BALANCE + " DOUBLE PRECISION, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDUSER + " ) REFERENCES " + TABLE_USERS + " ( " + COLUMN_USER_ID + " ) " + " ON DELETE SET NULL, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDSCOOTER + " ) REFERENCES " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_ID + " ) " + " ON DELETE SET NULL" + " ) ";
-            //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
+    //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
 
 
     public static String getColumnRentsReturnDate() {
@@ -334,6 +351,9 @@ public final class DataSource {
     private static final String INSERT_INTO_RENTALS = " INSERT INTO " + TABLE_RENTS + " ( " + COLUMN_RENTS_TIMESTAMP + ", " + COLUMN_RENTS_IDUSER + ", " + COLUMN_RENTS_IDSCOOTER + " ) " +
             "VALUES ( ? , ? , ? )";
 
+    private static final String INSERT_INTO_REPORTS = " INSERT INTO " + TABLE_REPORTS + " ( " + COLUMN_REPORTS_USER_ID + ", " + COLUMN_REPORT_SUBMISSION_DATE + ", " + COLUMN_REPORTS_TITLE + ", " + COLUMN_REPORTS_TEXT + " ) " +
+            "VALUES ( ? , ? , ? , ?)";
+
     private static final String UPDATE_RETURN_DATE = " UPDATE " + TABLE_RENTS + " SET " +   COLUMN_RENTS_RETURN_DATE +  " = " + " ( ? ) " + " WHERE " + COLUMN_RENTS_ID + " = ? ";
 
     private static final String JOIN_SCOOTERS_ON_RENTALS = " SELECT " + TABLE_SCOOTERS+"." +COLUMN_SCOOTER_MODEL + ", " + TABLE_SCOOTERS +"."+COLUMN_SCOOTER_MAX_VELOCITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_COLOR + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_AVAILABILITY + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BASKET + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_RANGE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_PRICE + ", " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_BATTERY + ", " + TABLE_RENTS+"."+COLUMN_RENTS_TIMESTAMP + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDUSER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + ", " + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + ", " + TABLE_RENTS +"." + COLUMN_RENTS_ID + ", "  + TABLE_RENTS + "." + COLUMN_RENTS_BALANCE + " FROM " + TABLE_SCOOTERS + " INNER JOIN " + TABLE_RENTS + " ON " + TABLE_SCOOTERS+"."+COLUMN_SCOOTER_ID + " = " + TABLE_RENTS+"."+COLUMN_RENTS_IDSCOOTER + " WHERE "  + TABLE_RENTS+"."+COLUMN_RENTS_RETURN_DATE + " IS NULL " + " AND " + TABLE_RENTS + "." + COLUMN_RENTS_IDUSER + " = ? ";
@@ -345,6 +365,7 @@ public final class DataSource {
     private static final String QUERY_RHISTORY = " SELECT * FROM " + TABLE_RHISTORY + " WHERE " + COLUMN_RENTS_IDUSER + " = " + " ? ";
 
     private static final String DELETE_FROM_USERS = " DELETE FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = " + " ? ";
+
 
     public ResultSet joinScooterOnRentals(int userID) throws SQLException{
 
@@ -462,6 +483,23 @@ public final class DataSource {
             insertIntoRentals.setInt(2,rent.getUserID());
             insertIntoRentals.setInt(3,rent.getRentScooterID());
             insertIntoRentals.executeUpdate();
+            c.commit();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void insertIntoReports(Report report){
+
+        try(PreparedStatement ps = c.prepareStatement(INSERT_INTO_REPORTS)){
+
+            ps.setInt(1,report.getUserID());
+            ps.setTimestamp(2,report.getSubmissionDate());
+            ps.setString(3,report.getReportTitle());
+            ps.setString(4,report.getReportText());
+            ps.executeUpdate();
             c.commit();
 
         }catch(SQLException e){
@@ -679,7 +717,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "zchmtson", "eidFBsA6ftUlntzXqXBjWrnBwEuXra3h");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "password");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
@@ -687,6 +725,7 @@ public final class DataSource {
             stm.executeUpdate(CREATE_SCOOTERS_TABLE);
             stm.executeUpdate(CREATE_RENTS_TABLE);
             stm.executeUpdate(CREATE_RHISTORY_TABLE);
+            stm.executeUpdate(CREATE_REPORTS_TABLE);
             c.commit();
             stm.close();
 
