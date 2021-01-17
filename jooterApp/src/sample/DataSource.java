@@ -5,13 +5,13 @@ import java.sql.*;
 
 public final class DataSource {
 
-    private static final String DB_NAME = "zchmtson";
+    //private static final String DB_NAME = "zchmtson";
     //
-    private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+    //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    //private static final String DB_NAME = "jooterExample";
+    private static final String DB_NAME = "jooterExample";
 
-    //private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -729,7 +729,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "zchmtson", "eidFBsA6ftUlntzXqXBjWrnBwEuXra3h");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "password");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
