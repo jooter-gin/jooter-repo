@@ -84,7 +84,7 @@ public class UserAddFundsController {
         double result;
 
         if(!(amount.isEmpty() || amount.trim().isEmpty())){
-            if(Validate.isNumeric(amount) && parseDouble(amount)<1000) {
+            if(Validate.isNumeric(amount) && parseDouble(amount)<1000 && parseDouble(amount) >0) {
                 try {
                     user.setUserAccountFunds(parseDouble(amount));
                     infAmountLabel.setText("Funds has been added");
