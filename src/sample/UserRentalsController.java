@@ -149,11 +149,11 @@ public class UserRentalsController {
             long milliseconds = rentalDate.getTime() - timestamp.getTime();
             int seconds = (int) milliseconds / 1000;
             int hours = -(seconds / 3600);
-            int minutes = -((seconds % 3600) / 60);
+            int minutes = -(seconds/60);
             seconds = -((seconds % 3600) % 60);
             double cost = price * minutes;
             double roundOff = Math.round(cost * 100.0) / 100.0;
-            sj.setBalance(cost);
+            sj.setBalance(roundOff);
             DataSource.getInstance().updateRentsBalance(roundOff,rentsID);
             User.subtractFromBalance(roundOff,LoginController.getUserID());
             DataSource.getInstance().insertIntoRhistory(sj);

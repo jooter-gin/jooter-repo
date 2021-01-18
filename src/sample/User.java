@@ -13,6 +13,9 @@ public class User extends Validate {
     private String userEmail;
     private String userCardNo;
     private double userAccountBalance;
+    private double userAccountFunds;
+
+
 
     public User(int userId, String userName, String userSurname, String userLogin, String userPassword, String userEmail, String userCardNo, double userAccountBalance) {
         this.userId = userId;
@@ -23,6 +26,18 @@ public class User extends Validate {
         this.userEmail = userEmail;
         this.userCardNo = userCardNo;
         this.userAccountBalance = userAccountBalance;
+    }
+
+    public User(int userId, String userName, String userSurname, String userLogin, String userPassword, String userEmail, String userCardNo, double userAccountBalance, double userAccountFunds) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.userLogin = userLogin;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
+        this.userCardNo = userCardNo;
+        this.userAccountBalance = userAccountBalance;
+        this.userAccountFunds = userAccountFunds;
     }
 
     public User() {
@@ -92,6 +107,13 @@ public class User extends Validate {
         this.userAccountBalance = userAccountBalance;
     }
 
+    public double getUserAccountFunds() {
+        return userAccountFunds;
+    }
+
+    public void setUserAccountFunds(double userAccountFunds) {
+        this.userAccountFunds = userAccountFunds;
+    }
     public static void subtractFromBalance(double amount, int userID){
 
         double balance;
