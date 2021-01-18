@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="outerAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ReportsDisplayController">
+    <children>
+        <AnchorPane fx:id="innerAnchorPane" prefHeight="520.0" prefWidth="195.0" style="-fx-background-color: #0f1f2a;">
+            <children>
+                <Button fx:id="logoutButton" layoutX="43.0" layoutY="273.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
+            <Button fx:id="backButton" layoutX="43.0" layoutY="215.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #8A2BE2;" text="BACK" textFill="#ebe8e8" />
+            </children>
+        </AnchorPane>
+        <TableView fx:id="adminReportsTable" layoutX="193.0" onMouseClicked="#onReportClicked" prefHeight="520.0" prefWidth="361.0">
+            <columns>
+            <TableColumn fx:id="reportsColumn" prefWidth="360.0" text="Reports" />
+            </columns>
+        </TableView>
+      <TextArea fx:id="adminReportWindow" layoutX="552.0" layoutY="180.0" prefHeight="340.0" prefWidth="351.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextArea>
+      <Label fx:id="nameLabel" layoutX="567.0" layoutY="43.0" prefHeight="27.0" prefWidth="161.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="surnameLabel" layoutX="567.0" layoutY="70.0" prefHeight="27.0" prefWidth="161.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="emailLabel" layoutX="567.0" layoutY="97.0" prefHeight="27.0" prefWidth="169.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label layoutX="564.0" layoutY="8.0" text="From:">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="dateLabel" layoutX="627.0" layoutY="140.0" prefHeight="27.0" prefWidth="201.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="564.0" layoutY="136.0" prefHeight="27.0" prefWidth="84.0" text="Sent:">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="90.0" fitWidth="109.0" layoutX="783.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@file.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>
