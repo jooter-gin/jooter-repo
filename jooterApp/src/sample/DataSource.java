@@ -1,16 +1,17 @@
 package sample;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 
 public final class DataSource {
 
-    //private static final String DB_NAME = "zchmtson";
+    private static final String DB_NAME = "zchmtson";
 //
-   //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+   private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    private static final String DB_NAME = "Jooter2";
+    //private static final String DB_NAME = "jooter";
 
-    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    //private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -69,6 +70,16 @@ public final class DataSource {
     private PreparedStatement queryRhistory;
 
     private PreparedStatement deleteFromRhistory;
+
+    private PreparedStatement selectMaxVelocity;
+
+    private PreparedStatement selectColor;
+
+    private PreparedStatement selectRange;
+
+    private PreparedStatement selectAvaliability;
+
+    private PreparedStatement selectPrice;
 
     public static final int REGULAR_ORDER = 1;
 
@@ -360,6 +371,19 @@ public final class DataSource {
 
     private static final String DELETE_FROM_USERS = " DELETE FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_ID + " = " + " ? ";
 
+    private static final String SELECT_VELOCITY =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_MAX_VELOCITY + " = ?";
+
+    private static final String SELECT_COLOR = " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_COLOR + " = ?";
+
+    private static final String SELECT_PRICE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_PRICE + " = ?";
+
+    private static final String SELECT_AVA =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_AVAILABILITY + " = ? ";
+
+    private static final String SELECT_RANGE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_RANGE + " BETWEEN " + " ? " + " AND " + " ? ";
+
+
+
+
     public ResultSet joinScooterOnRentals(int userID) throws SQLException{
 
         joinScootersOnRentals.setInt(1,userID);
@@ -449,6 +473,32 @@ public final class DataSource {
 
     private final String DELETE_FROM_RHISTORY = " DELETE FROM " + TABLE_RHISTORY + " WHERE " + COLUMN_RENTS_IDUSER + " = " + " ? ";
 
+    public ResultSet selectAva(int number) throws SQLException{
+
+        selectAvaliability.setInt(1, number);
+        return selectAvaliability.executeQuery();
+    }
+
+
+    public ResultSet selectColor(String color) throws SQLException{
+
+        selectColor.setString(1, color);
+        return selectColor.executeQuery();
+    }
+
+    public ResultSet selectPrice(double price) throws SQLException{
+
+        selectPrice.setDouble(1, price);
+        return selectPrice.executeQuery();
+
+    }
+
+    public ResultSet selectRange(int range1,int range2) throws SQLException{
+
+        selectRange.setInt(1,range1);
+        selectRange.setInt(2,range2);
+        return selectRange.executeQuery();
+    }
 
     public void deleteFromUsers(int userID){
 
@@ -711,7 +761,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "123");
+            c = DriverManager.getConnection(CONNECTION_STRING, "zchmtson", "eidFBsA6ftUlntzXqXBjWrnBwEuXra3h");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
@@ -749,8 +799,11 @@ public final class DataSource {
             queryUserBalance = c.prepareStatement(QUERY_USER_BALANCE);
             queryUserFunds = c.prepareStatement(QUERY_USER_FUNDS);
             deleteFromUsers = c.prepareStatement(DELETE_FROM_USERS);
-
-
+            selectAvaliability = c.prepareStatement(SELECT_AVA);
+            selectMaxVelocity = c.prepareStatement(SELECT_VELOCITY);
+            selectColor = c.prepareStatement(SELECT_COLOR);
+            selectRange = c.prepareStatement(SELECT_RANGE);
+            selectPrice = c.prepareStatement(SELECT_PRICE);
 
         } catch (SQLException e) {
 
