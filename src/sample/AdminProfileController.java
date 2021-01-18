@@ -66,6 +66,8 @@ public class AdminProfileController {
     Button adminUpdateButton = new Button();
     @FXML
     Button AdminButtonLoad = new Button();
+    @FXML
+    Button reportsButton = new Button();
 
     public TableView<Scooter> getAdminScootersTable() {
         return AdminScootersTable;
@@ -91,6 +93,21 @@ public class AdminProfileController {
     TableColumn<Scooter,Integer> AdminScooterAvailability = new TableColumn<>();
     @FXML
     TableColumn<Scooter,Integer> AdminScooterID = new TableColumn<>();
+
+
+    public void onReportButtonClicked(){
+
+
+        Stage appStage = (Stage) AdminOuterAnorchPane.getScene().getWindow();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("adminReportsDisplay.fxml"));
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
 
 
     public void initialize(){

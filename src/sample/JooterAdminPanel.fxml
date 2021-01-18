@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="AdminOuterAnorchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminProfileController">
+<AnchorPane fx:id="AdminOuterAnorchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminProfileController">
     <children>
         <AnchorPane fx:id="AdminFunctionalAnchorPane" prefHeight="520.0" prefWidth="195.0" style="-fx-background-color: #0f1f2a;">
             <children>
@@ -25,6 +25,7 @@
                 </Button>
                 <Button fx:id="adminLogOutButton" layoutX="41.0" layoutY="442.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
                 <Button fx:id="adminUpdateButton" layoutX="43.0" layoutY="136.0" mnemonicParsing="false" onAction="#onUpdateButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #FF7F00;" text="UPDATE" />
+            <Button fx:id="reportsButton" layoutX="41.0" layoutY="73.0" mnemonicParsing="false" onAction="#onReportButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #9932CC;" text="REPORTS" />
             </children>
         </AnchorPane>
         <TableView fx:id="AdminScootersTable" layoutX="195.0" prefHeight="520.0" prefWidth="711.0">

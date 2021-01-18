@@ -5,13 +5,13 @@ import java.sql.*;
 
 public final class DataSource {
 
-    private static final String DB_NAME = "zchmtson";
+    //private static final String DB_NAME = "zchmtson";
 //
-   private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+   //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    //private static final String DB_NAME = "jooterExample";
+    private static final String DB_NAME = "jooter";
 
-   // private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+   private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -205,6 +205,10 @@ public final class DataSource {
             COLUMN_REPORTS_TITLE + " TEXT NOT NULL, " +
             COLUMN_REPORTS_TEXT + " TEXT NOT NULL " + " ) ";
 
+
+
+
+
     private final String CREATE_RENTS_TABLE = " CREATE TABLE IF NOT EXISTS " + " " + TABLE_RENTS +
             "( " +
             COLUMN_RENTS_ID + " SERIAL PRIMARY KEY, " +
@@ -329,6 +333,26 @@ public final class DataSource {
         return COLUMN_RENTS_IDSCOOTER;
     }
 
+    public static String getColumnReportsId() {
+        return COLUMN_REPORTS_ID;
+    }
+
+    public static String getColumnReportsUserId() {
+        return COLUMN_REPORTS_USER_ID;
+    }
+
+    public static String getColumnReportSubmissionDate() {
+        return COLUMN_REPORT_SUBMISSION_DATE;
+    }
+
+    public static String getColumnReportsText() {
+        return COLUMN_REPORTS_TEXT;
+    }
+
+    public static String getColumnReportsTitle() {
+        return COLUMN_REPORTS_TITLE;
+    }
+
     private static final String QUERY_USERS = "SELECT * FROM " + TABLE_USERS;
 
     public ResultSet queryUsers() throws SQLException{
@@ -397,6 +421,7 @@ public final class DataSource {
 
     private static final String SELECT_RANGE =  " SELECT * FROM " + TABLE_SCOOTERS + " WHERE " + COLUMN_SCOOTER_RANGE + " BETWEEN " + " ? " + " AND " + " ? ";
 
+    private static final String QUERY_REPORTS = " SELECT * FROM " + TABLE_REPORTS;
 
 
 
@@ -410,6 +435,17 @@ public final class DataSource {
 
         joinScootersHistory.setInt(1,userID);
         return joinScootersHistory.executeQuery();
+    }
+
+    public ResultSet queryReports() throws SQLException{
+
+        try(PreparedStatement ps = c.prepareStatement(QUERY_REPORTS)){
+
+            return ps.executeQuery();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ResultSet queryAdmins() throws SQLException{
@@ -794,7 +830,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "zchmtson", "eidFBsA6ftUlntzXqXBjWrnBwEuXra3h");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "owca777");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
