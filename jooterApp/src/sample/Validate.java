@@ -14,6 +14,18 @@ public abstract class Validate {
         return sc.nextLine();
     }
 
+    public static boolean hasSpace(final String str){
+        if(str != null){
+            for(int i = 0; i < str.length(); i++){
+                if(Character.isWhitespace(str.charAt(i))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static boolean validateCardNumber(String cardNo) {
 
         boolean flag = false;
@@ -35,9 +47,9 @@ public abstract class Validate {
 
         boolean flag = false;
 
-                if (login.length() >= 5) {
-                    flag = true;
-                }
+        if (login.length() >= 5) {
+            flag = true;
+        }
 
         return flag;
     }
@@ -48,18 +60,18 @@ public abstract class Validate {
         String first_letter;
         boolean hasNumber = false;
 
-                for (int i = 0; i < password.length(); i++) {
+        for (int i = 0; i < password.length(); i++) {
 
-                    if (Character.isDigit(password.charAt(i))) {
-                        hasNumber = true;
-                        break;
-                    }
-                }
-                first_letter = password.substring(0, 1).toUpperCase();
+            if (Character.isDigit(password.charAt(i))) {
+                hasNumber = true;
+                break;
+            }
+        }
+        first_letter = password.substring(0, 1).toUpperCase();
 
-                if ((password.length() >= 8) && (first_letter.equals(String.valueOf(password.charAt(0)))) && (hasNumber)) {
-                    flag = true;
-                }
+        if ((password.length() >= 8) && (first_letter.equals(String.valueOf(password.charAt(0)))) && (hasNumber)) {
+            flag = true;
+        }
 
         return flag;
     }
