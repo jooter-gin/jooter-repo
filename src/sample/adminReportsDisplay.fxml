@@ -16,6 +16,7 @@
             <children>
                 <Button fx:id="logoutButton" layoutX="43.0" layoutY="273.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
             <Button fx:id="backButton" layoutX="43.0" layoutY="215.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #8A2BE2;" text="BACK" textFill="#ebe8e8" />
+            <Button fx:id="deleteButton" layoutX="43.0" layoutY="155.0" mnemonicParsing="false" onAction="#onDeleteButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #4169E1;" text="SOLVE" textFill="#ebe8e8" />
             </children>
         </AnchorPane>
         <TableView fx:id="adminReportsTable" layoutX="193.0" onMouseClicked="#onReportClicked" prefHeight="520.0" prefWidth="361.0">

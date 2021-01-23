@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 public class ReportsDisplayController {
 
@@ -41,6 +42,8 @@ public class ReportsDisplayController {
     Button logoutButton = new Button();
     @FXML
     Button backButton = new Button();
+    @FXML
+    Button deleteButton = new Button();
 
     private ObservableList<Report> reports;
     Stage stage = new Stage();
@@ -103,6 +106,9 @@ public class ReportsDisplayController {
 
 
                  }
+
+                 rs.close();
+
              }catch(SQLException e){
                  e.printStackTrace();
              }
@@ -142,4 +148,73 @@ public class ReportsDisplayController {
 
     }
 
+    public void onDeleteButtonClicked(){
+
+        Report report;
+        reports =  FXCollections.observableArrayList();
+
+        if(adminReportsTable.getSelectionModel().getSelectedItem() != null){
+
+            report = adminReportsTable.getSelectionModel().getSelectedItem();
+
+            int reportID = report.getReportID();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Are you sure?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent()){
+
+                if(result.get() == ButtonType.OK){
+
+                    DataSource.getInstance().deleteFromReports(reportID);
+
+                        try {
+                            ResultSet rs = DataSource.getInstance().queryReports();
+
+                            if (rs != null) {
+
+                                while (rs.next()) {
+
+                                    Report r = new Report();
+                                    r.setReportID(rs.getInt(DataSource.getColumnReportsId()));
+                                    r.setUserID(rs.getInt(DataSource.getColumnReportsUserId()));
+                                    r.setSubmissionDate(rs.getTimestamp(DataSource.getColumnReportSubmissionDate()));
+                                    r.setReportTitle(rs.getString(DataSource.getColumnReportsTitle()));
+                                    r.setReportText(rs.getString(DataSource.getColumnReportsText()));
+                                    reports.add(r);
+                                }
+
+                                adminReportsTable.setItems(reports);
+                                rs.close();
+                                nameLabel.setText(null);
+                                surnameLabel.setText(null);
+                                dateLabel.setText(null);
+                                emailLabel.setText(null);
+                                adminReportWindow.setText(null);
+
+                            } else {
+                                alert.setTitle("Warning");
+                                alert.setHeaderText("Error");
+                                alert.showAndWait();
+                            }
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                }
+
+            }else{
+
+                alert.setTitle("Warning");
+                alert.setHeaderText("Error");
+                alert.showAndWait();
+
+            }
+
+        }
+
+
+  }
+
 }
+
