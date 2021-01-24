@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 public class ReportsDisplayController {
 
@@ -41,11 +42,24 @@ public class ReportsDisplayController {
     Button logoutButton = new Button();
     @FXML
     Button backButton = new Button();
+    @FXML
+    Button deleteButton = new Button();
+    @FXML
+    Button replyButton = new Button();
 
     private ObservableList<Report> reports;
     Stage stage = new Stage();
     Parent root;
+    private static int reportID;
+    private static int destination;
 
+    public static int getDestination() {
+        return destination;
+    }
+
+    public static int getReportID() {
+        return reportID;
+    }
 
     public void initialize(){
 
@@ -66,7 +80,10 @@ public class ReportsDisplayController {
                     report.setSubmissionDate(rs.getTimestamp(DataSource.getColumnReportSubmissionDate()));
                     report.setReportTitle(rs.getString(DataSource.getColumnReportsTitle()));
                     report.setReportText(rs.getString(DataSource.getColumnReportsText()));
-                    reports.add(report);
+                    report.setDestination(rs.getInt(DataSource.getColumnReportsDestination()));
+                    if(report.getDestination() == 0) {
+                        reports.add(report);
+                    }
                 }
             }
         }catch (SQLException e){
@@ -84,28 +101,33 @@ public class ReportsDisplayController {
         Report report;
 
         if(adminReportsTable.getSelectionModel().getSelectedItem() != null){
-             report = adminReportsTable.getSelectionModel().getSelectedItem();
-             int userID = report.getUserID();
-             String reportText = report.getReportText();
-             adminReportWindow.setText(reportText);
-             Timestamp submissionDate = report.getSubmissionDate();
-             DateFormat df = new SimpleDateFormat("dd MMMM yyyy HH:mm");
-             String formattedSubmissionDate = df.format(submissionDate);
-             dateLabel.setText(formattedSubmissionDate);
+            report = adminReportsTable.getSelectionModel().getSelectedItem();
+            reportID = report.getReportID();
+            int userID = report.getUserID();
+            destination = userID;
+            String reportText = report.getReportText();
+            adminReportWindow.setText(reportText);
+            Timestamp submissionDate = report.getSubmissionDate();
+            DateFormat df = new SimpleDateFormat("dd MMMM yyyy HH:mm");
+            String formattedSubmissionDate = df.format(submissionDate);
+            dateLabel.setText(formattedSubmissionDate);
 
-             try{
-                 ResultSet rs = DataSource.getInstance().queryUser(userID);
-                 while(rs.next()){
+            try{
+                ResultSet rs = DataSource.getInstance().queryUser(userID);
+                while(rs.next()){
 
-                     nameLabel.setText(rs.getString(DataSource.getColumnUserName()));
-                     surnameLabel.setText(rs.getString(DataSource.getColumnUserSurname()));
-                     emailLabel.setText(rs.getString(DataSource.getColumnUserEmail()));
+                    nameLabel.setText(rs.getString(DataSource.getColumnUserName()));
+                    surnameLabel.setText(rs.getString(DataSource.getColumnUserSurname()));
+                    emailLabel.setText(rs.getString(DataSource.getColumnUserEmail()));
 
 
-                 }
-             }catch(SQLException e){
-                 e.printStackTrace();
-             }
+                }
+
+                rs.close();
+
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
 
     }
@@ -142,4 +164,90 @@ public class ReportsDisplayController {
 
     }
 
+    public void onDeleteButtonClicked(){
+
+        Report report;
+        reports =  FXCollections.observableArrayList();
+
+        if(adminReportsTable.getSelectionModel().getSelectedItem() != null){
+
+            report = adminReportsTable.getSelectionModel().getSelectedItem();
+
+            int reportID = report.getReportID();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Are you sure?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent()){
+
+                if(result.get() == ButtonType.OK){
+
+                    DataSource.getInstance().deleteFromReports(reportID);
+
+                    try {
+                        ResultSet rs = DataSource.getInstance().queryReports();
+
+                        if (rs != null) {
+
+                            while (rs.next()) {
+
+                                Report r = new Report();
+                                r.setReportID(rs.getInt(DataSource.getColumnReportsId()));
+                                r.setUserID(rs.getInt(DataSource.getColumnReportsUserId()));
+                                r.setSubmissionDate(rs.getTimestamp(DataSource.getColumnReportSubmissionDate()));
+                                r.setReportTitle(rs.getString(DataSource.getColumnReportsTitle()));
+                                r.setReportText(rs.getString(DataSource.getColumnReportsText()));
+                                reports.add(r);
+                            }
+
+                            adminReportsTable.setItems(reports);
+                            rs.close();
+                            nameLabel.setText(null);
+                            surnameLabel.setText(null);
+                            dateLabel.setText(null);
+                            emailLabel.setText(null);
+                            adminReportWindow.setText(null);
+
+                        } else {
+                            alert.setTitle("Warning");
+                            alert.setHeaderText("Error");
+                            alert.showAndWait();
+                        }
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }else{
+
+                alert.setTitle("Warning");
+                alert.setHeaderText("Error");
+                alert.showAndWait();
+
+            }
+
+        }
+
+
+    }
+
+
+
+    public void onReplyButtonClicked(){
+
+        if(adminReportsTable.getSelectionModel().getSelectedItem() != null) {
+
+            try {
+                Stage appStage = (Stage) outerAnchorPane.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("AdminReplyScene.fxml"));
+                appStage.setScene(new Scene(root));
+                appStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
+

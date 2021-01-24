@@ -1,17 +1,16 @@
 package sample;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 
 public final class DataSource {
 
     //private static final String DB_NAME = "zchmtson";
 //
-   //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
+    //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
     private static final String DB_NAME = "jooterExample";
 
-   private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
+    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
     private Connection c;
 
@@ -197,13 +196,20 @@ public final class DataSource {
     private static final String COLUMN_REPORTS_TEXT = "ReportText";
     private static final String COLUMN_REPORTS_TITLE = "ReportTitle";
 
+    public static String getColumnReportsDestination() {
+        return COLUMN_REPORTS_DESTINATION;
+    }
+
+    private static final String COLUMN_REPORTS_DESTINATION = "ReportDestination";
+
     private final String CREATE_REPORTS_TABLE = "CREATE TABLE IF NOT EXISTS " + " " + TABLE_REPORTS +
             "(" +
             COLUMN_REPORTS_ID + " SERIAL PRIMARY KEY, " +
             COLUMN_REPORTS_USER_ID + " INT NOT NULL, " +
             COLUMN_REPORT_SUBMISSION_DATE + " TIMESTAMP NOT NULL, "+
             COLUMN_REPORTS_TITLE + " TEXT NOT NULL, " +
-            COLUMN_REPORTS_TEXT + " TEXT NOT NULL " + " ) ";
+            COLUMN_REPORTS_TEXT + " TEXT NOT NULL, " +
+            COLUMN_REPORTS_DESTINATION + " INT NOT NULL ) ";
 
 
 
@@ -212,7 +218,7 @@ public final class DataSource {
     private final String CREATE_RENTS_TABLE = " CREATE TABLE IF NOT EXISTS " + " " + TABLE_RENTS +
             "( " +
             COLUMN_RENTS_ID + " SERIAL PRIMARY KEY, " +
-           // COLUMN_RENTS_RENTALDATE + " DATE NOT NULL, " +
+            // COLUMN_RENTS_RENTALDATE + " DATE NOT NULL, " +
             COLUMN_RENTS_TIMESTAMP + " TIMESTAMP NOT NULL , " +
             COLUMN_RENTS_RETURN_DATE + " TIMESTAMP , " +
             COLUMN_RENTS_IDUSER + " INT, "  +
@@ -220,7 +226,7 @@ public final class DataSource {
             COLUMN_RENTS_BALANCE + " DOUBLE PRECISION, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDUSER + " ) REFERENCES " + TABLE_USERS + " ( " + COLUMN_USER_ID + " ) " + " ON DELETE SET NULL, " +
             " FOREIGN KEY ( " + COLUMN_RENTS_IDSCOOTER + " ) REFERENCES " + TABLE_SCOOTERS + " ( " + COLUMN_SCOOTER_ID + " ) " + " ON DELETE SET NULL" + " ) ";
-            //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
+    //" FOREIGN KEY ( " + COLUMN_RENTS_IDAMDIN + " ) REFERENCES " + TABLE_ADMINS + " ( " + COLUMN_ADMIN_ID + " ) )";
 
 
     public static String getColumnRentsReturnDate() {
@@ -396,8 +402,8 @@ public final class DataSource {
 
     private static final String INSERT_INTO_RENTALS = " INSERT INTO " + TABLE_RENTS + " ( " + COLUMN_RENTS_TIMESTAMP + ", " + COLUMN_RENTS_IDUSER + ", " + COLUMN_RENTS_IDSCOOTER + " ) " +
             "VALUES ( ? , ? , ? )";
-    private static final String INSERT_INTO_REPORTS = " INSERT INTO " + TABLE_REPORTS + " ( " + COLUMN_REPORTS_USER_ID + ", " + COLUMN_REPORT_SUBMISSION_DATE + ", " + COLUMN_REPORTS_TITLE + ", " + COLUMN_REPORTS_TEXT + " ) " +
-            "VALUES ( ? , ? , ? , ?)";
+    private static final String INSERT_INTO_REPORTS = " INSERT INTO " + TABLE_REPORTS + " ( " + COLUMN_REPORTS_USER_ID + ", " + COLUMN_REPORT_SUBMISSION_DATE + ", " + COLUMN_REPORTS_TITLE + ", " + COLUMN_REPORTS_TEXT + ", " + COLUMN_REPORTS_DESTINATION + " ) " +
+            "VALUES ( ? , ? , ? , ?, ?)";
 
     private static final String UPDATE_RETURN_DATE = " UPDATE " + TABLE_RENTS + " SET " +   COLUMN_RENTS_RETURN_DATE +  " = " + " ( ? ) " + " WHERE " + COLUMN_RENTS_ID + " = ? ";
 
@@ -423,6 +429,39 @@ public final class DataSource {
 
     private static final String QUERY_REPORTS = " SELECT * FROM " + TABLE_REPORTS;
 
+    private static final String DELETE_FROM_REPORTS = " DELETE FROM " + TABLE_REPORTS + " WHERE " + COLUMN_REPORTS_ID + " = ? ";
+
+    private static final String QUERY_REPORTS_BY_ID = " SELECT * FROM " + TABLE_REPORTS + " WHERE " + COLUMN_REPORTS_ID + " = ? ";
+
+
+    public ResultSet queryReportsByID(int reportID){
+
+        try(PreparedStatement ps = c.prepareStatement(QUERY_REPORTS_BY_ID)){
+            ps.setInt(1,reportID);
+            return ps.executeQuery();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    public void deleteFromReports(int reportID){
+
+        try(PreparedStatement ps = c.prepareStatement(DELETE_FROM_REPORTS)){
+            ps.setInt(1,reportID);
+            ps.executeUpdate();
+            c.commit();
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+
+
+        }
+
+    }
 
 
     public ResultSet joinScooterOnRentals(int userID) throws SQLException{
@@ -611,6 +650,7 @@ public final class DataSource {
             ps.setTimestamp(2,report.getSubmissionDate());
             ps.setString(3,report.getReportTitle());
             ps.setString(4,report.getReportText());
+            ps.setInt(5,report.getDestination());
             ps.executeUpdate();
             c.commit();
 
@@ -918,4 +958,3 @@ public final class DataSource {
         }
     }
 }
-

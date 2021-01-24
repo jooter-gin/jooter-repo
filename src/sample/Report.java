@@ -9,6 +9,15 @@ public class Report {
     private String reportText;
     private Timestamp submissionDate;
     private String reportTitle;
+    private int destination;
+
+    public int getDestination() {
+        return destination;
+    }
+
+    public void setDestination(int destination) {
+        this.destination = destination;
+    }
 
     public String getReportTitle() {
         return reportTitle;

@@ -11,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import javax.imageio.IIOException;
-import java.awt.*;
 import java.io.IOException;
 import java.sql.Timestamp;
 
@@ -54,6 +52,7 @@ public class ReportsController {
             report.setUserID(LoginController.getUserID());
             report.setSubmissionDate(new Timestamp(System.currentTimeMillis()));
             report.setReportText(text);
+            report.setDestination(0);
             DataSource.getInstance().insertIntoReports(report);
             reportSceneTextArea.clear();
             Alert alert  = new Alert(Alert.AlertType.INFORMATION);

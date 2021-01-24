@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import java.awt.Font?>
+<?import java.awt.TextArea?>
+<AnchorPane fx:id="outerAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminReplyController">
+    <children>
+        <AnchorPane fx:id="innerAnchorPane" prefHeight="520.0" prefWidth="195.0" style="-fx-background-color: #0f1f2a;">
+         <children>
+            <Button fx:id="backButton" layoutX="47.0" layoutY="159.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="101.0" style="-fx-background-color: #4682B4;" text="BACK" onAction="#onBackButtonClicked" />
+            <Button fx:id="logoutButton" layoutX="47.0" layoutY="235.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="101.0" style="-fx-background-color: #D8BFD8;" text="LOGOUT" onAction="#onLogOutButtonClicked" />
+         </children>
+        </AnchorPane>
+      <Label fx:id="nameLabel" layoutX="567.0" layoutY="43.0" prefHeight="27.0" prefWidth="161.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="surnameLabel" layoutX="567.0" layoutY="70.0" prefHeight="27.0" prefWidth="161.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="dateLabel" layoutX="627.0" layoutY="140.0" prefHeight="27.0" prefWidth="201.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="textWindow1" layoutX="196.0" layoutY="47.0" prefHeight="432.0" prefWidth="346.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextArea>
+      <TextArea fx:id="textWindow2" layoutX="539.0" layoutY="47.0" prefHeight="432.0" prefWidth="364.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextArea>
+      <Button fx:id="sendButton" layoutX="445.0" layoutY="487.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="195.0" text="SEND" onAction="#onSendButtonClicked" />
+      <Label alignment="CENTER" layoutX="259.0" layoutY="10.0" prefHeight="17.0" prefWidth="186.0" text="User message" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="616.0" layoutY="10.0" prefHeight="17.0" prefWidth="186.0" text="Your reply">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

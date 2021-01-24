@@ -9,6 +9,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.awt.Image?>
+<?import java.awt.Font?>
+<?import java.awt.TextField?>
+<?import java.awt.TextArea?>
+<?import javax.swing.text.html.ImageView?>
 <AnchorPane fx:id="reportSceneAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="416.0" style="-fx-background-color: #0f1f2a;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ReportsController">
    <children>
       <TextArea fx:id="reportSceneTextArea" layoutX="27.0" layoutY="320.0" prefHeight="196.0" prefWidth="361.0">
