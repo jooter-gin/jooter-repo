@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="outerAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="820.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UserRepliesController">
+    <children>
+        <AnchorPane fx:id="innerAnchorPane" prefHeight="520.0" prefWidth="193.0" style="-fx-background-color: #0f1f2a;">
+            <children>
+                <Button fx:id="logoutButton" layoutX="43.0" layoutY="273.0" mnemonicParsing="false" onAction="#onLogOutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #000000;" text="LOGOUT" textFill="#ebe8e8" />
+                <Button fx:id="backButton" layoutX="43.0" layoutY="215.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #8A2BE2;" text="BACK" textFill="#ebe8e8" />
+
+            </children>
+        </AnchorPane>
+        <TableView fx:id="adminReportsTable" layoutX="193.0" prefHeight="520.0" prefWidth="601.0">
+            <columns>
+                <TableColumn fx:id="titleColumn"  prefWidth="200.0" text="Title" />
+            </columns>
+            <columns>
+                <TableColumn fx:id="textColumn" prefWidth="400.0" text="Text" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
