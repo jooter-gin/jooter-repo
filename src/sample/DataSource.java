@@ -9,7 +9,7 @@ public final class DataSource {
 //
    //private static final String CONNECTION_STRING = "jdbc:postgresql://hattie.db.elephantsql.com:5432/" + DB_NAME;
 
-    private static final String DB_NAME = "jooterExample";
+    private static final String DB_NAME = "jooter5";
 
    private static final String CONNECTION_STRING = "jdbc:postgresql://localhost:5432/" + DB_NAME;
 
@@ -449,26 +449,6 @@ public final class DataSource {
         }
 
     }
-
-
-    public void deleteFromReports(int reportID){
-
-        try(PreparedStatement ps = c.prepareStatement(DELETE_FROM_REPORTS)){
-            ps.setInt(1,reportID);
-            ps.executeUpdate();
-            c.commit();
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-
-
-        }
-
-    }
-    private static final String DELETE_FROM_REPORTS = " DELETE FROM " + TABLE_REPORTS + " WHERE " + COLUMN_REPORTS_ID + " = ? ";
-
-
     public void deleteFromReports(int reportID){
 
         try(PreparedStatement ps = c.prepareStatement(DELETE_FROM_REPORTS)){
@@ -912,7 +892,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "password");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "haslo");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);

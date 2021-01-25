@@ -45,8 +45,6 @@ public class ReportsDisplayController {
     @FXML
     Button deleteButton = new Button();
     @FXML
-    Button deleteButton = new Button();
-    @FXML
     Button replyButton = new Button();
 
     private ObservableList<Report> reports;
@@ -199,6 +197,8 @@ public class ReportsDisplayController {
                                 r.setSubmissionDate(rs.getTimestamp(DataSource.getColumnReportSubmissionDate()));
                                 r.setReportTitle(rs.getString(DataSource.getColumnReportsTitle()));
                                 r.setReportText(rs.getString(DataSource.getColumnReportsText()));
+                                r.setDestination(rs.getInt(DataSource.getColumnReportsDestination()));
+                                if(r.getDestination()==0)
                                 reports.add(r);
                             }
 

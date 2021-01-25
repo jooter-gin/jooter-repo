@@ -103,7 +103,21 @@ public class ReportsController {
         }
 
     }
+    public void onRepliesButtonClicked(){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("UserReplies.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            reportSceneAnchorPane.getScene().getWindow().hide();
 
+        }catch(IOException e){
+
+            e.printStackTrace();
+        }
+
+
+    }
 }
 
 
