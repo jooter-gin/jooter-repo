@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="outerAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminUserRentalsController">
+    <children>
+        <AnchorPane fx:id="innerAnchorPane" prefHeight="520.0" prefWidth="195.0" style="-fx-background-color: #0f1f2a;">
+            <children>
+                <Button fx:id="logoutButton" layoutX="43.0" layoutY="260.0" mnemonicParsing="false" onAction="#onLogoutButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #FFFACD;" text="LOGOUT" textFill="#464343" />
+            <Button fx:id="backButton" layoutX="43.0" layoutY="199.0" mnemonicParsing="false" onAction="#onBackButtonClicked" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #F08080;" text="BACK" />
+            </children>
+        </AnchorPane>
+        <TableView fx:id="tableView" layoutX="195.0" prefHeight="520.0" prefWidth="711.0">
+            <columns>
+                <TableColumn fx:id="c1" prefWidth="166.0" text="Name" />
+                <TableColumn fx:id="c2" prefWidth="140.0" text="Surname" />
+                <TableColumn fx:id="c3" prefWidth="150.0" text="ScooterID" />
+                <TableColumn fx:id="c4" prefWidth="128.0" text="RentalDate" />
+                <TableColumn fx:id="c5" prefWidth="126.0" text="ReturnDate" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

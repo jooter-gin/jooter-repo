@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -122,6 +123,17 @@ public class UserRentalsController {
 
         if(UserRentsTable.getSelectionModel().getSelectedItem() != null) {
 
+            User user = new User();
+            user.setUserId(LoginController.getUserID());
+            try {
+                ResultSet rs = DataSource.getInstance().queryUser(LoginController.getUserID());
+                while(rs.next()){
+                    user.setUserName(rs.getString(DataSource.getColumnUserName()));
+                    user.setUserSurname(rs.getString(DataSource.getColumnUserSurname()));
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
             ScooterJoin sj = UserRentsTable.getSelectionModel().getSelectedItem();
             int scooterId = sj.getRentsScooterID();
             int rentsID = sj.getRentsID();
@@ -156,7 +168,7 @@ public class UserRentalsController {
             sj.setBalance(roundOff);
             DataSource.getInstance().updateRentsBalance(roundOff,rentsID);
             User.subtractFromBalance(roundOff,LoginController.getUserID());
-            DataSource.getInstance().insertIntoRhistory(sj);
+            DataSource.getInstance().insertIntoRhistory(sj,user);
             scooterJoinData.clear();
 
             try {
