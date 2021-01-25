@@ -45,6 +45,8 @@ public class ReportsDisplayController {
     @FXML
     Button deleteButton = new Button();
     @FXML
+    Button deleteButton = new Button();
+    @FXML
     Button replyButton = new Button();
 
     private ObservableList<Report> reports;
@@ -249,5 +251,5 @@ public class ReportsDisplayController {
         }
     }
 
-}
 
+}

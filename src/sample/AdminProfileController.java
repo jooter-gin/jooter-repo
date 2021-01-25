@@ -25,9 +25,9 @@ public class AdminProfileController {
     }
 
     @FXML
-    AnchorPane AdminOuterAnorchPane = new AnchorPane();
+    AnchorPane outerAnchorPane = new AnchorPane();
     @FXML
-    AnchorPane AdminFunctionalAnchorPane = new AnchorPane();
+    AnchorPane innerAnchorPane = new AnchorPane();
     @FXML
     Label ProfProfileLabel = new Label();
     @FXML
@@ -68,6 +68,8 @@ public class AdminProfileController {
     Button AdminButtonLoad = new Button();
     @FXML
     Button reportsButton = new Button();
+    @FXML
+    Button rentalsButton = new Button();
 
     public TableView<Scooter> getAdminScootersTable() {
         return AdminScootersTable;
@@ -86,7 +88,7 @@ public class AdminProfileController {
     @FXML
     TableColumn<Scooter,Integer> AdminScooterRange = new TableColumn<>();
     @FXML
-    TableColumn<Scooter,Integer> AdminScooterPrice = new TableColumn<>();
+    TableColumn<Scooter,Double> AdminScooterPrice = new TableColumn<>();
     @FXML
     TableColumn<Scooter,Integer> AdminScooterBattery = new TableColumn<>();
     @FXML
@@ -98,7 +100,7 @@ public class AdminProfileController {
     public void onReportButtonClicked(){
 
 
-        Stage appStage = (Stage) AdminOuterAnorchPane.getScene().getWindow();
+        Stage appStage = (Stage) outerAnchorPane.getScene().getWindow();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("adminReportsDisplay.fxml"));
             appStage.setScene(new Scene(root));
@@ -120,7 +122,7 @@ public class AdminProfileController {
             ResultSet rs = DataSource.getInstance().queryScooters();
             while(rs.next()){
 
-                adminData.add(new Scooter(rs.getInt(DataSource.getColumnAdminID()),rs.getString(DataSource.getColumnScooterModel()),rs.getInt(DataSource.getColumnScooterMaxVelocity()),rs.getString(DataSource.getColumnScooterColor()),rs.getInt(DataSource.getColumnScooterAvailability()),rs.getInt(DataSource.getColumnScooterBasket()),rs.getInt(DataSource.getColumnScooterRange()),rs.getInt(DataSource.getColumnScooterPrice()),rs.getInt(DataSource.getColumnScooterBattery())));
+                adminData.add(new Scooter(rs.getInt(DataSource.getColumnAdminID()),rs.getString(DataSource.getColumnScooterModel()),rs.getInt(DataSource.getColumnScooterMaxVelocity()),rs.getString(DataSource.getColumnScooterColor()),rs.getInt(DataSource.getColumnScooterAvailability()),rs.getInt(DataSource.getColumnScooterBasket()),rs.getInt(DataSource.getColumnScooterRange()),rs.getDouble(DataSource.getColumnScooterPrice()),rs.getInt(DataSource.getColumnScooterBattery())));
 
             }
 
@@ -151,7 +153,7 @@ public class AdminProfileController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-            AdminOuterAnorchPane.getScene().getWindow().hide();
+            outerAnchorPane.getScene().getWindow().hide();
 
 
         }catch(IOException e){
@@ -173,7 +175,7 @@ public class AdminProfileController {
                     ResultSet rs = DataSource.getInstance().queryScooters();
                     while (rs.next()) {
 
-                        adminData.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getInt(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
+                        adminData.add(new Scooter(rs.getInt(DataSource.getColumnScooterID()), rs.getString(DataSource.getColumnScooterModel()), rs.getInt(DataSource.getColumnScooterMaxVelocity()), rs.getString(DataSource.getColumnScooterColor()), rs.getInt(DataSource.getColumnScooterAvailability()), rs.getInt(DataSource.getColumnScooterBasket()), rs.getInt(DataSource.getColumnScooterRange()), rs.getDouble(DataSource.getColumnScooterPrice()), rs.getInt(DataSource.getColumnScooterBattery())));
 
                     }
 
@@ -201,7 +203,7 @@ public class AdminProfileController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-            AdminOuterAnorchPane.getScene().getWindow().hide();
+            outerAnchorPane.getScene().getWindow().hide();
 
         }catch(IOException e){
             e.printStackTrace();
@@ -220,7 +222,7 @@ public class AdminProfileController {
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.show();
-                AdminOuterAnorchPane.getScene().getWindow().hide();
+                outerAnchorPane.getScene().getWindow().hide();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -246,4 +248,20 @@ public class AdminProfileController {
             }
         }
     }
+
+    public void onRentalsButtonClicked(){
+
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("AdminUserRentals.fxml"));
+            Stage stage = (Stage) outerAnchorPane.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
