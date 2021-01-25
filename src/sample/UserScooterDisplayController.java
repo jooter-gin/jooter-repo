@@ -72,7 +72,22 @@ public class UserScooterDisplayController {
 
     private int option = 5;
 
+	public void onContactInfoButtonClicked(){
 
+        try {
+            Stage appStage = (Stage)UsersScooterAnorchPane.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("contactInfo.fxml"));
+            Scene scene = new Scene(root);
+            appStage.setScene(scene);
+            appStage.show();
+
+        }catch (IOException e){
+
+            e.printStackTrace();
+        }
+
+    }
+	
     public void onFilterButtonClicked(){
 
         String input = filterTextField.getText().trim();
