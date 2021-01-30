@@ -892,7 +892,7 @@ public final class DataSource {
     public void open () {
 
         try{
-            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "haslo");
+            c = DriverManager.getConnection(CONNECTION_STRING, "postgres", "haslo1223");
             Statement stm = c.createStatement();
             c.setAutoCommit(false);
             stm.executeUpdate(CREATE_USERS_TABLE);
